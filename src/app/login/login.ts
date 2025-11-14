@@ -8,6 +8,10 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from '@angular/material/button';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+
+import { loginValidationMessages } from '../../shared/constants/validation.messages';
+import { SnackbarService } from 'shared/services/snackbar.service';
 
 @Component({
   selector: 'app-login',
@@ -17,7 +21,8 @@ import { MatButtonModule } from '@angular/material/button';
     MatFormFieldModule,
     MatInputModule,
     MatIconModule,
-    MatButtonModule
+    MatButtonModule,
+    MatSnackBarModule
   ],
   templateUrl: './login.html',
   styleUrl: './login.scss',
@@ -26,22 +31,16 @@ export class Login {
   private fb = inject(FormBuilder);
   private auth = inject(AuthService);
   private router = inject(Router);
+  private snackbar = inject(SnackbarService);   
 
   hidePassword = signal(true);
+
+  errors = loginValidationMessages;
 
   form = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required]]
   });
-
-  emailErrors = {
-    required: 'იმეილი სავალდებულოა',
-    email: 'არასწორი ელფოსტის ფორმატი',
-  };
-
-  passwordErrors = {
-    required: 'პაროლი სავალდებულოა',
-  };
 
   get formControls() {
     return this.form.controls;
@@ -57,12 +56,11 @@ export class Login {
 
     this.auth.login(email!, password!).subscribe(({ error }) => {
       if (error) {
-        console.error('Login error:', error.message);
-        alert('არასწორი მონაცემები ან მომხმარებელი არ არსებობს');
+        this.snackbar.error('არასწორი მონაცემები ან მომხმარებელი არ არსებობს');
         return;
       }
 
-      alert('ავტორიზაცია წარმატებით განხორციელდა!');
+      this.snackbar.success('ავტორიზაცია წარმატებით განხორციელდა!');
       this.router.navigateByUrl('/dashboard', { replaceUrl: true });
     });
   }

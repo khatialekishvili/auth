@@ -17,16 +17,16 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import {  MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { registerValidationMessages } from '../../shared/constants/validation.messages';
+import { SnackbarService } from 'shared/services/snackbar.service';
 
 export function formatISODate(date: string): string {
   return new Date(date).toISOString().split('T')[0];
 }
 
 @Component({
-  standalone: true,
   imports: [
     ReactiveFormsModule,
     errorMsg,
@@ -46,8 +46,7 @@ export class Register {
   private fb = inject(FormBuilder);
   private auth = inject(AuthService);
   private router = inject(Router);
-  private snack = inject(MatSnackBar);
-
+  private snackbar = inject(SnackbarService);
   errors = registerValidationMessages;
 
   form = this.fb.group(
@@ -67,16 +66,7 @@ export class Register {
   get formControls() {
     return this.form.controls;
   }
-
-  showSnack(message: string, action = 'Close', duration = 3000) {
-    this.snack.open(message, action, {
-      duration,
-      horizontalPosition: 'center',
-      verticalPosition: 'bottom',
-      panelClass: ['custom-snackbar'],
-    });
-  }
-
+  
   register() {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
@@ -88,7 +78,7 @@ export class Register {
 
     this.auth.checkUsername(username!).subscribe(({ data }) => {
       if (data) {
-        this.showSnack('მომხმარებლის სახელი უკვე არსებობს, აირჩიე სხვა.');
+        this.snackbar.error('მომხმარებლის სახელი უკვე არსებობს, აირჩიე სხვა.');
         return;
       }
 
@@ -96,14 +86,11 @@ export class Register {
         .register(username!, email!, formattedBirth, password!)
         .subscribe(({ error }) => {
           if (error) {
-            this.showSnack('დაფიქსირდა შეცდომა: ' + error.message);
+            this.snackbar.error('დაფიქსირდა შეცდომა: ' + error.message);
             return;
           }
 
-          this.showSnack(
-            'რეგისტრაცია წარმატებით დასრულდა! შეამოწმეთ ელფოსტა.',
-            'OK'
-          );
+         this.snackbar.success('რეგისტრაცია წარმატებით დასრულდა', 'OK');
           this.router.navigateByUrl('/login');
         });
     });
