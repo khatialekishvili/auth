@@ -15,12 +15,7 @@ export class AuthService {
     );
   }
 
-  register(
-    username: string,
-    email: string,
-    birthDate: string,
-    password: string
-  ) {
+  register(username: string, email: string, birthDate: string, password: string) {
     return from(
       this.supabase.client.auth.signUp({
         email,

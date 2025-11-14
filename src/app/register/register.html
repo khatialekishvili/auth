@@ -15,7 +15,7 @@
           />
           @if (formControls.username.touched && formControls.username.errors) {
             <mat-error class="text-red-500 text-sm mt-1">
-              {{ formControls.username.errors | errorMsg: usernameErrors }}
+              {{ formControls.username.errors | errorMsg: errors.username }}
             </mat-error>
           }
         </mat-form-field>
@@ -33,7 +33,7 @@
           />
           @if (formControls.email.touched && formControls.email.errors) {
             <mat-error class="text-red-500 text-sm mt-1">
-              {{ formControls.email.errors | errorMsg: emailErrors }}
+              {{ formControls.email.errors | errorMsg: errors.email }}
             </mat-error>
           }
         </mat-form-field>
@@ -47,7 +47,7 @@
           <mat-datepicker #picker></mat-datepicker>
           @if (formControls.birth_date.touched && formControls.birth_date.errors) {
             <mat-error class="text-red-500 text-sm mt-1">
-              {{ formControls.birth_date.errors | errorMsg: birthDateErrors }}
+              {{ formControls.birth_date.errors | errorMsg: errors.birth_date }}
             </mat-error>
           }
         </mat-form-field>
@@ -68,7 +68,7 @@
           </button>
           @if (formControls.password.touched && formControls.password.errors) {
             <mat-error class="text-red-500 text-sm mt-1">
-              {{ formControls.password.errors | errorMsg: passwordErrors }}
+              {{ formControls.password.errors | errorMsg: errors.password }}
             </mat-error>
           }
         </mat-form-field>
@@ -92,7 +92,7 @@
             </mat-icon> -->
           @if (formControls.confirm_password.touched && formControls.confirm_password.errors) {
             <mat-error class="text-red-500 text-sm mt-1">
-              {{ formControls.confirm_password.errors | errorMsg: confirmPasswordErrors }}
+              {{ formControls.confirm_password.errors | errorMsg: errors.confirm_password }}
             </mat-error>
           }
         </mat-form-field>

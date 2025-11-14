@@ -3,12 +3,11 @@ import {
   FormBuilder,
   Validators,
   ReactiveFormsModule,
-  AbstractControl,
-  ValidationErrors
 } from '@angular/forms';
 
 import { Router } from '@angular/router';
 import { AuthService } from 'shared/services/auth.service';
+import { adultValidator, matchPasswords } from 'shared/services/validators.service';
 import { errorMsg } from 'shared/pipes/errorMsg';
 
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -18,36 +17,12 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
+import { registerValidationMessages } from '../../shared/constants/validation.messages';
 
-export function adultValidator(control: AbstractControl): ValidationErrors | null {
-  const birthDate = new Date(control.value);
-  if (isNaN(birthDate.getTime())) return null;
-
-  const today = new Date();
-  const age =
-    today.getFullYear() - birthDate.getFullYear() -
-    (today.getMonth() < birthDate.getMonth() ||
-    (today.getMonth() === birthDate.getMonth() && today.getDate() < birthDate.getDate())
-      ? 1
-      : 0);
-
-  return age >= 18 ? null : { min: true };
-}
-
-export function matchPasswords(passwordKey: string, confirmKey: string) {
-  return (formGroup: AbstractControl): ValidationErrors | null => {
-    const group = formGroup as any;
-    const password = group.get(passwordKey);
-    const confirm = group.get(confirmKey);
-
-    if (password && confirm && password.value !== confirm.value) {
-      confirm.setErrors({ mismatch: true });
-    } else {
-      confirm.setErrors(null);
-    }
-    return null;
-  };
+export function formatISODate(date: string): string {
+  return new Date(date).toISOString().split('T')[0];
 }
 
 @Component({
@@ -61,7 +36,8 @@ export function matchPasswords(passwordKey: string, confirmKey: string) {
     MatCardModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatIconModule
+    MatIconModule,
+    MatSnackBarModule
   ],
   templateUrl: './register.html',
   styleUrl: './register.scss',
@@ -70,6 +46,9 @@ export class Register {
   private fb = inject(FormBuilder);
   private auth = inject(AuthService);
   private router = inject(Router);
+  private snack = inject(MatSnackBar);
+
+  errors = registerValidationMessages;
 
   form = this.fb.group(
     {
@@ -85,60 +64,48 @@ export class Register {
   hidePassword = signal(true);
   hideConfirmPassword = signal(true);
 
-  usernameErrors = {
-    required: 'მომხმარებლის სახელი სავალდებულოა',
-    minlength: 'მინიმუმ 3 სიმბოლოა საჭირო',
-  };
-
-  emailErrors = {
-    required: 'იმეილი სავალდებულოა',
-    email: 'არასწორი ელფოსტის ფორმატი',
-  };
-
-  birthDateErrors = {
-    required: 'დაბადების თარიღი სავალდებულოა',
-    min: 'უნდა იყოთ 18 წლის ან მეტის',
-  };
-
-  passwordErrors = {
-    required: 'პაროლი სავალდებულოა',
-    minlength: 'პაროლი უნდა შეიცავდეს მინ. 6 სიმბოლოს',
-  };
-
-  confirmPasswordErrors = {
-    required: 'გაიმეორე პაროლი',
-    mismatch: 'პაროლები არ ემთხვევა',
-  };
-
   get formControls() {
     return this.form.controls;
   }
 
-register() {
-  if (this.form.invalid) {
-    this.form.markAllAsTouched();
-    return;
+  showSnack(message: string, action = 'Close', duration = 3000) {
+    this.snack.open(message, action, {
+      duration,
+      horizontalPosition: 'center',
+      verticalPosition: 'bottom',
+      panelClass: ['custom-snackbar'],
+    });
   }
 
-  const { username, email, birth_date, password } = this.form.value;
-  const formattedBirthDate = new Date(birth_date!).toISOString().split('T')[0];
+  register() {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
 
-  this.auth.register(
-    username!,
-    email!,
-    formattedBirthDate,
-    password!
-  )
-    .subscribe(({ error }) => {
-      if (error) {
-        console.error('Sign-up error:', error);
+    const { username, email, birth_date, password } = this.form.value;
+    const formattedBirth = formatISODate(birth_date!);
 
-        alert('დაფიქსირდა შეცდომა: ' + error.message);
+    this.auth.checkUsername(username!).subscribe(({ data }) => {
+      if (data) {
+        this.showSnack('მომხმარებლის სახელი უკვე არსებობს, აირჩიე სხვა.');
         return;
       }
 
-      alert('რეგისტრაცია წარმატებით დასრულდა! შეამოწმეთ ელფოსტა დადასტურებისთვის.');
-      this.router.navigateByUrl('/login');
+      this.auth
+        .register(username!, email!, formattedBirth, password!)
+        .subscribe(({ error }) => {
+          if (error) {
+            this.showSnack('დაფიქსირდა შეცდომა: ' + error.message);
+            return;
+          }
+
+          this.showSnack(
+            'რეგისტრაცია წარმატებით დასრულდა! შეამოწმეთ ელფოსტა.',
+            'OK'
+          );
+          this.router.navigateByUrl('/login');
+        });
     });
-}
+  }
 }
