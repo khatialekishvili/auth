@@ -19,7 +19,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import {  MatSnackBarModule } from '@angular/material/snack-bar';
 
-import { registerValidationMessages } from '../../shared/constants/validation.messages';
+import { registerValidationMessages } from 'shared/constants/validation.messages';
 import { SnackbarService } from 'shared/services/snackbar.service';
 
 export function formatISODate(date: string): string {

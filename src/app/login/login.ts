@@ -10,7 +10,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
-import { loginValidationMessages } from '../../shared/constants/validation.messages';
+import { loginValidationMessages } from 'shared/constants/validation.messages';
 import { SnackbarService } from 'shared/services/snackbar.service';
 
 @Component({
