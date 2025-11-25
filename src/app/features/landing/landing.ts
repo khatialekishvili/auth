@@ -1,44 +1,27 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, signal, inject, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ProductService } from 'shared/services/product.service';
 
 @Component({
   selector: 'app-landing',
   templateUrl: './landing.html',
-  styleUrl: './landing.scss',
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class Landing {
-
   private productService = inject(ProductService);
 
-  bags = signal<unknown[]>([]);
-  dresses = signal<unknown[]>([]);
-  shoes = signal<unknown[]>([]);
-  watches = signal<unknown[]>([]);
-  jewellery = signal<unknown[]>([]);
+  products = signal<any[]>([]);
+  featured = signal<any[]>([]);
+  rest = signal<any[]>([]);
+  
 
   constructor() {
-    this.loadData();
-  }
+  this.productService.getAllWomen().subscribe(data => {
+    this.products.set(data);
+    this.featured.set([data[7], data[12]]);
 
-  loadData() {
-    this.productService.getBags().subscribe((res: any) => {
-      this.bags.set(res.products);
-    });
-
-    this.productService.getDresses().subscribe((res: any) => {
-      this.dresses.set(res.products);
-    });
-
-    this.productService.getShoes().subscribe((res: any) => {
-      this.shoes.set(res.products);
-    });
-
-    this.productService.getWatches().subscribe((res: any) => {
-      this.watches.set(res.products);
-    });
-
-    this.productService.getJewellery().subscribe((res: any) => {
-      this.jewellery.set(res.products);
-    });
-  }
+    this.rest.set(
+      data.filter((item: any, i: number) => i !== 7 && i !== 12)
+    );
+  });
+}
 }
