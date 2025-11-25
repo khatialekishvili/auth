@@ -8,6 +8,6 @@ import { Footer } from "./footer/footer";
   imports: [Header, RouterOutlet, Footer],
   templateUrl: './layout.html',
 })
-export class LayoutTs {
+export class Layout {
 
 }

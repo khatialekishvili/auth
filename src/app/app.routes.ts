@@ -4,7 +4,7 @@ export const routes: Routes = [
   {
     path: '',
     loadComponent: () =>
-      import('./features/layout/layout').then(m => m.LayoutTs),
+      import('./features/layout/layout').then(m => m.Layout),
     children: [
       {
         path: '',
@@ -32,11 +32,12 @@ export const routes: Routes = [
   },
   
   {
-      path: 'discount',
-      loadComponent: () =>
-        import('../shared/modals/discount/modal/modal').then(m => m.Modal)
-    },
-    {
+    path: 'discount',
+    loadComponent: () =>
+      import('../shared/modals/discount/modal/modal').then(m => m.Modal)
+  },
+
+  {
     path: 'products',
     loadComponent: () =>
       import('./features/products/products').then(m => m.Products)
