@@ -31,11 +31,11 @@ export const routes: Routes = [
       import('./login/login').then(m => m.Login)
   },
   
-  {
-    path: 'discount',
-    loadComponent: () =>
-      import('../shared/modals/discount/modal/modal').then(m => m.Modal)
-  },
+// {
+//   path: 'discount',
+//   loadComponent: () =>
+//     import('shared/modals/discount/modal/modal').then(m => m.Modal)
+// },
 
   {
     path: 'products',

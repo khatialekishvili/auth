@@ -73,3 +73,9 @@ swiper-container::part(bullet-active) {
 .font-styrene {
   font-family: "Styrene A Web", sans-serif;
 }
+
+.discount-dialog-panel .mat-mdc-dialog-container {
+  padding: 0 !important;
+  border-radius: 0 !important;
+  overflow: hidden !important;
+}
