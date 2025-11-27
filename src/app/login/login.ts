@@ -56,12 +56,12 @@ export class Login {
 
     this.auth.login(email!, password!).subscribe(({ error }) => {
       if (error) {
-        this.snackbar.error('არასწორი მონაცემები ან მომხმარებელი არ არსებობს');
+        this.snackbar.error('Authorization failed or user deosnt exist. Please check your credentials and try again.');
         return;
       }
 
-      this.snackbar.success('ავტორიზაცია წარმატებით განხორციელდა!');
-      this.router.navigateByUrl('/dashboard', { replaceUrl: true });
+      this.snackbar.success('Login successful!');
+      this.router.navigateByUrl('/', { replaceUrl: true });
     });
   }
 }

@@ -4,6 +4,7 @@ import {
   Validators,
   ReactiveFormsModule,
 } from '@angular/forms';
+import { switchMap, EMPTY } from 'rxjs';
 
 import { Router } from '@angular/router';
 import { AuthService } from 'shared/services/auth.service';
@@ -67,32 +68,36 @@ export class Register {
     return this.form.controls;
   }
   
-  register() {
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
-      return;
-    }
 
-    const { username, email, birth_date, password } = this.form.value;
-    const formattedBirth = formatISODate(birth_date!);
+register() {
+  if (this.form.invalid) {
+    this.form.markAllAsTouched();
+    return;
+  }
 
-    this.auth.checkUsername(username!).subscribe(({ data }) => {
-      if (data) {
-        this.snackbar.error('მომხმარებლის სახელი უკვე არსებობს, აირჩიე სხვა.');
+  const { username, email, birth_date, password } = this.form.value;
+  const formattedBirth = formatISODate(birth_date!);
+
+  this.auth.checkUsername(username!).pipe(
+      switchMap(({ data }) => {
+        if (data) {
+          this.snackbar.error('მომხმარებლის სახელი უკვე არსებობს, აირჩიე სხვა.');
+          return EMPTY;
+        }
+
+        return this.auth.register(
+          username!, email!, formattedBirth, password!
+        );
+      })
+    )
+    .subscribe(({ error }) => {
+      if (error) {
+        this.snackbar.error(error.message);
         return;
       }
 
-      this.auth
-        .register(username!, email!, formattedBirth, password!)
-        .subscribe(({ error }) => {
-          if (error) {
-            this.snackbar.error('დაფიქსირდა შეცდომა: ' + error.message);
-            return;
-          }
-
-         this.snackbar.success('რეგისტრაცია წარმატებით დასრულდა', 'OK');
-          this.router.navigateByUrl('/login');
-        });
+      this.snackbar.success('რეგისტრაცია წარმატებით დასრულდა', 'OK');
+      this.router.navigateByUrl('/login');
     });
-  }
 }
+  } 
