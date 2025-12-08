@@ -1,0 +1,8 @@
+.page-content {
+  position: relative;
+  transition: filter 180ms ease, opacity 180ms ease;
+}
+
+.page-content.is-blurred {
+  filter: blur(4px);
+}

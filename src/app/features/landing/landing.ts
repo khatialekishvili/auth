@@ -2,9 +2,11 @@ import { Component, signal, inject, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core
 import { MatDialog } from '@angular/material/dialog';
 import { ProductService } from 'shared/services/product.service';
 import { Modal } from 'shared/modals/discount/modal/modal';
+import { HoverElevateDirective } from 'shared/directives/hover-elevate.directive';
 
 @Component({
   selector: 'app-landing',
+  imports: [HoverElevateDirective],
   templateUrl: './landing.html',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

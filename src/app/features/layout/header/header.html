@@ -1,4 +1,8 @@
-<header class="w-full sticky top-0 z-50 bg-white border-b border-gray-200">
+<header
+  class="w-full sticky top-0 z-50 bg-white border-b border-gray-200 relative"
+  (mouseenter)="openSearch()"
+  (mouseleave)="closeSearch()"
+>
   <nav class="flex items-center justify-between px-6 py-4">
 
     <div class="flex items-center gap-6">
@@ -22,7 +26,19 @@
     </div>
 
     <div class="flex items-center gap-6 text-[20px]">
-      <i class="ph ph-magnifying-glass hover:opacity-60"></i>
+      <div class="hidden md:block">
+        <button
+          type="button"
+          class="flex items-center justify-center text-[20px] hover:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-full p-1"
+          aria-label="Open search menu"
+          aria-haspopup="dialog"
+          [attr.aria-expanded]="isSearchOpen()"
+          (click)="toggleSearch()"
+        >
+          <i class="ph ph-magnifying-glass"></i>
+        </button>
+
+      </div>
 
       <span class="hidden md:block text-[18px]">Stores</span>
 
@@ -42,4 +58,69 @@
     </div>
 
   </nav>
+
+  @if (isSearchOpen()) {
+    <section
+      class="absolute inset-x-0 top-full bg-white border border-gray-200 shadow-lg rounded-b-md text-[14px]"
+      aria-label="Search navigation"
+      (keydown.escape)="closeSearch()"
+    >
+      <div class="px-6 py-10 flex gap-19">
+        <div class="basis-[820px] pl-[140px] flex gap-25">
+          <div class="space-y-3">
+            <h2 class="text-xs tracking-[0.16em] uppercase text-gray-500">
+              Categories
+            </h2>
+            <ul class="space-y-2 mt-7">
+              <li><a href="#" class="hover:opacity-60 duration-300">Bags</a></li>
+              <li><a href="#" class="hover:opacity-60 duration-300">Clothing</a></li>
+              <li><a href="#" class="hover:opacity-60 duration-300">Leather Goods</a></li>
+              <li><a href="#" class="hover:opacity-60 duration-300">Accessories</a></li>
+              <li><a href="#" class="hover:opacity-60 duration-300">Gifts</a></li>
+              <li><a href="#" class="hover:opacity-60 duration-300">Shop All</a></li>
+            </ul>
+          </div>
+
+          <div class="space-y-3 ">
+            <h2 class="text-xs tracking-[0.16em] uppercase text-gray-500">
+              Featured
+            </h2>
+            <ul class="space-y-2 mt-7">
+              <li><a href="#" class="hover:opacity-60 duration-300">New Arrivals</a></li>
+              <li><a href="#" class="hover:opacity-60 duration-300">Bestsellers</a></li>
+              <li><a href="#" class="hover:opacity-60 duration-300">Trending Now</a></li>
+              <li><a href="#" class="hover:opacity-60 duration-300">Loungewear</a></li>
+            </ul>
+          </div>
+
+          <div class="space-y-3">
+            <h2 class="text-xs tracking-[0.16em] uppercase text-gray-500">
+              Collections
+            </h2>
+            <ul class="space-y-2 mt-7">
+              <li><a href="#" class="hover:opacity-60 duration-300">Party and events</a></li>
+              <li><a href="#" class="hover:opacity-60 duration-300">Office looks</a></li>
+              <li><a href="#" class="hover:opacity-60 duration-300">Selection</a></li>
+              <li><a href="#" class="hover:opacity-60 duration-300">Online Exclusive</a></li>
+              <li><a href="#" class="hover:opacity-60 duration-300">Knitwear</a></li>
+              <li><a href="#" class="hover:opacity-60 duration-300">Total Look</a></li>
+              <li><a href="#" class="hover:opacity-60 duration-300">Basics</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="w-[520px] flex-shrink-0 ml-auto mr-15">
+          <div class="overflow-hidden rounded-lg">
+            <img
+              ngSrc="assets/search.png"
+              width="720"
+              height="450"
+              alt="Model wearing knit top"
+              class="w-full h-auto object-cover"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+  }
 </header>

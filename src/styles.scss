@@ -65,6 +65,14 @@ swiper-container::part(bullet-active) {
   overflow: hidden;
 }
 
+.hover-elevate {
+  transform: scale(1.03);
+  box-shadow:
+    0 18px 45px rgba(15, 23, 42, 0.08),
+    0 8px 16px rgba(15, 23, 42, 0.04);
+  transition: transform 500ms ease, box-shadow 500ms ease;
+}
+
 @font-face {
   font-family: "Styrene A Web";
   src: url("/assets/fonts/StyreneAWeb-Regular.woff2") format("woff2");

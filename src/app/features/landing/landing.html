@@ -38,25 +38,25 @@
     
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
 
-      <div class="relative overflow-hidden rounded-lg shadow-none hover:shadow-xl transition-shadow duration-300">
+      <div class="relative overflow-hidden rounded-lg shadow-none" appHoverElevate>
         <img src="assets/pic1.png" alt="picture of sweather"
-             class="w-[500px] h-[532px] object-cover transition-transform duration-500 hover:scale-103" />
+             class="w-[500px] h-[532px] object-cover" />
         <p class="absolute bottom-6 left-10 text-white text-lg font-medium">
           New Arrivals
         </p>
       </div>
 
-      <div class="relative overflow-hidden rounded-lg shadow-none hover:shadow-xl transition-shadow duration-300">
+      <div class="relative overflow-hidden rounded-lg shadow-none" appHoverElevate>
         <img src="assets/pic2.png" alt="picture of jacket"
-             class="w-[500px] h-[532px] object-cover transition-transform duration-500 hover:scale-103" />
+             class="w-[500px] h-[532px] object-cover" />
         <p class="absolute bottom-6 left-10 text-white text-lg font-medium">
           The Casual Edit
         </p>
       </div>
 
-      <div class="relative overflow-hidden rounded-lg shadow-none hover:shadow-xl transition-shadow duration-300">
+      <div class="relative overflow-hidden rounded-lg shadow-none" appHoverElevate>
         <img src="assets/pic3.png" alt="picture of pants"
-             class="w-[500px] h-[532px] object-cover transition-transform duration-500 hover:scale-103" />
+             class="w-[500px] h-[532px] object-cover" />
         <p class="absolute bottom-6 left-10 text-white text-lg font-medium">
           Best-Sellers
         </p>
@@ -87,8 +87,8 @@
       class="w-full  ">
 
       @for (item of products(); track item.id) {
-      <swiper-slide class="!w-[280px] p-[1px] transition-transform duration-500 hover:scale-103 pb-16">
-        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+      <swiper-slide class="!w-[280px] p-[1px] pb-16">
+        <div class="bg-white rounded-lg shadow-md overflow-hidden" appHoverElevate>
           <img
             [src]="item.thumbnail"
             class="w-[280px] h-[279px] object-cover bg-[#F6F6F4] "/>
@@ -106,14 +106,13 @@
   <div class="grid grid-cols-1 md:grid-cols-2 gap-10 w-full">
 
     @for (item of featured(); track item.id) {
-      <div class="relative overflow-hidden flex justify-center bg-[#F6F6F4]">
+      <div class="relative overflow-hidden flex justify-center bg-[#F6F6F4]" appHoverElevate>
         <img
           [src]="item.images[1]"
           class="w-[280px] 
                  h-[380px] object-cover
                  md:w-[600px]
-                 md:h-[800px] md:object-cover
-                 transition-transform duration-500 hover:scale-105"/>
+                 md:h-[800px] md:object-cover"/>
 
         <p class="absolute bottom-6 left-6 text-[#333] text-lg font-medium tracking-wide">
           {{ item.title }}

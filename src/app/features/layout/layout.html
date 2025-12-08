@@ -3,7 +3,7 @@
 </div>
 
 <app-header />
-<main class="min-h-screen">
+<main class="min-h-screen page-content" [class.is-blurred]="uiState.searchOverlayActive()">
   <router-outlet></router-outlet>
 </main>
 
