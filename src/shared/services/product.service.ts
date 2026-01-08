@@ -29,18 +29,23 @@ export class ProductService {
     getJewellery(){
         return this.http.get(`${this.base}/category/womens-jewellery`);
     }
+    
 
     getAllWomen() {
   return combineLatest([
     this.getBags(),
     this.getDresses(),
-    this.getShoes()
+    this.getShoes(),
+    // this.getWatches(),     
+    // this.getJewellery() 
   ]).pipe(
     map(([bags, dresses, shoes]: any) => {
       const max = Math.max(
         bags.products.length,
         dresses.products.length,
-        shoes.products.length
+        shoes.products.length,
+        // watches.products.length,
+        // jewellery.products.length
       );
 
       const mixed: any[] = [];
@@ -49,10 +54,14 @@ export class ProductService {
         if (bags.products[i]) mixed.push(bags.products[i]);
         if (dresses.products[i]) mixed.push(dresses.products[i]);
         if (shoes.products[i]) mixed.push(shoes.products[i]);
+        // if (watches.products[i]) mixed.push(watches.products[i]);
+        // if (jewellery.products[i]) mixed.push(jewellery.products[i]);
       }
 
       return mixed;
     })
   );
+  
+
 }
 }

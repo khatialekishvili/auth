@@ -1,3 +1,1 @@
-// export * from './directives/hover-elevate.directive';
-
-
+export * from './components/product-swiper/product-swiper';

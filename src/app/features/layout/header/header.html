@@ -1,44 +1,55 @@
 <header
   class="w-full sticky top-0 z-50 bg-white border-b border-gray-200 relative"
-  (mouseenter)="openSearch()"
-  (mouseleave)="closeSearch()"
 >
-  <nav class="flex items-center justify-between px-6 py-4">
+  <nav class="flex items-center justify-between px-6 py-4 relative">
 
     <div class="flex items-center gap-6">
 
-      <button class="md:hidden text-[26px]">
+      <button 
+        class="md:hidden text-[20px]"
+        (click)="toggleMobileMenu()"
+        aria-label="Toggle mobile menu"
+        >
         <i class="ph ph-list"></i>
       </button>
 
+      <a routerLink="/" class="hidden md:block cursor-pointer">
       <img src="assets/Logo.svg"
            width="86"
            height="19"
-           alt="Logo"
-           class="" />
+             alt="Logo" />
+      </a>
 
-      <ul class="hidden md:flex items-center gap-8 text-[15px] font-medium ml-6">
-        <li><a class="hover:opacity-60 duration-300" href="#">Shop</a></li>
+      <ul 
+        class="hidden md:flex items-center gap-8 text-[15px] font-medium ml-6"
+        (mouseenter)="openHoverMenu()"
+        (mouseleave)="closeHoverMenu()"
+      >
+        <li><a routerLink="/products" class="hover:opacity-60 duration-300">Shop</a></li>
         <li><a class="hover:opacity-60 duration-300" href="#">New Arrivals</a></li>
         <li><a class="hover:opacity-60 duration-300" href="#">Sales</a></li>
         <li><a class="hover:opacity-60 duration-300" href="#">Journal</a></li>
       </ul>
     </div>
 
-    <div class="flex items-center gap-6 text-[20px]">
-      <div class="hidden md:block">
-        <button
-          type="button"
-          class="flex items-center justify-center text-[20px] hover:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-full p-1"
-          aria-label="Open search menu"
-          aria-haspopup="dialog"
-          [attr.aria-expanded]="isSearchOpen()"
-          (click)="toggleSearch()"
-        >
-          <i class="ph ph-magnifying-glass"></i>
-        </button>
+    <a routerLink="/" class="md:hidden absolute left-1/2 -translate-x-1/2 cursor-pointer">
+    <img src="assets/Logo.svg"
+         width="86"
+         height="19"
+           alt="Logo" />
+    </a>
 
-      </div>
+    <div class="flex items-center gap-2 md:gap-6  text-[18px] md:text-[20px]">
+      <button
+        type="button"
+        class="flex items-center justify-center text-[20px] hover:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-full p-1"
+        aria-label="Open search"
+        aria-haspopup="dialog"
+        [attr.aria-expanded]="isSearchOverlayOpen()"
+        (click)="toggleSearchOverlay()"
+      >
+        <i class="ph ph-magnifying-glass"></i>
+      </button>
 
       <span class="hidden md:block text-[18px]">Stores</span>
 
@@ -48,22 +59,24 @@
 
       <div class="flex items-center gap-1">
         <i class="ph ph-heart hover:opacity-60"></i>
-        <span>0</span>
+        <span>{{ wishlistService.count() }}</span>
       </div>
 
       <div class="flex items-center gap-1">
         <i class="ph ph-shopping-cart hover:opacity-60"></i>
-        <span>2</span>
+        <span>{{ cartService.count() }}</span>
       </div>
     </div>
 
   </nav>
 
-  @if (isSearchOpen()) {
+  @if (isHoverMenuOpen() && !isSearchOverlayOpen()) {
     <section
-      class="absolute inset-x-0 top-full bg-white border border-gray-200 shadow-lg rounded-b-md text-[14px]"
-      aria-label="Search navigation"
-      (keydown.escape)="closeSearch()"
+      class="hidden md:block absolute inset-x-0 top-full bg-white border border-gray-200 shadow-lg rounded-b-md text-[14px]"
+      aria-label="Navigation menu"
+      (mouseenter)="openHoverMenu()"
+      (mouseleave)="closeHoverMenu()"
+      (keydown.escape)="closeHoverMenu()"
     >
       <div class="px-6 py-10 flex gap-19">
         <div class="basis-[820px] pl-[140px] flex gap-25">
@@ -82,7 +95,7 @@
           </div>
 
           <div class="space-y-3 ">
-            <h2 class="text-xs tracking-[0.16em] uppercase text-gray-500">
+            <h2 class="text-xs tracking-[0.16em]  text-gray-500">
               Featured
             </h2>
             <ul class="space-y-2 mt-7">
@@ -94,7 +107,7 @@
           </div>
 
           <div class="space-y-3">
-            <h2 class="text-xs tracking-[0.16em] uppercase text-gray-500">
+            <h2 class="text-xs tracking-[0.16em] text-gray-500">
               Collections
             </h2>
             <ul class="space-y-2 mt-7">
@@ -109,7 +122,7 @@
           </div>
         </div>
 
-        <div class="w-[520px] flex-shrink-0 ml-auto mr-15">
+        <div class="w-[520px] flex-shrink-0 ml-auto mr-15 hidden xl:block">
           <div class="overflow-hidden rounded-lg">
             <img
               ngSrc="assets/search.png"
@@ -123,4 +136,227 @@
       </div>
     </section>
   }
+
+  @if (isSearchOverlayOpen()) {
+    <section
+      [class]="'absolute inset-x-0 top-full bg-white border border-gray-200 shadow-lg rounded-b-md text-[14px] z-[40] 
+      ' + (searchQuery() ? 'max-md:fixed max-md:inset-x-0 max-md:top-[60px] max-md:bottom-0 max-md:z-[60] max-md:overflow-y-auto max-md:border-none max-md:rounded-none max-md:shadow-none' : '')"
+      aria-label="Search"
+      role="dialog"
+      aria-modal="true"
+      (keydown.escape)="closeSearchOverlay()"
+    >
+      <div class="px-4 md:px-15 py-4 md:py-6">
+        <div class="flex items-center gap-4">
+          <i class="ph ph-magnifying-glass text-[18px] text-gray-600"></i>
+          
+          <input
+            #searchInput
+            type="text"
+            placeholder="Search..."
+            [value]="searchQuery()"
+            (input)="onSearchInput($event)"
+            class="flex-1 text-[16px] md:text-[17px] font-light outline-none placeholder:text-gray-400"
+            aria-label="Search products"
+            autocomplete="off"
+          />
+          
+          <button
+            type="button"
+            (click)="clearSearch()"
+            [class]="searchQuery() ? 'text-[20px] hover:opacity-60 duration-300 focus-visible:outline-none 
+            focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 
+            rounded-full p-2' : 'text-[20px] opacity-0 pointer-events-none rounded-full p-2'"
+            aria-label="Clear search"
+            [attr.aria-hidden]="!searchQuery()"
+          >
+            <i class="ph ph-x"></i>
+          </button>
+        </div>
+
+
+          @if (searchQuery() && searchResults().length === 0) {
+          <div class="text-center text-gray-500 pb-2 pt-4">
+            <p class="text-lg">No results found for "{{ searchQuery() }}"</p>
+          </div>
+          } @else if (searchQuery() && searchResults().length > 0) {
+          <div class="pt-4 pb-4">
+            <div class="flex items-center justify-between mb-4 border-b border-gray-200 pb-3 mt-8 md:mt-10">
+              <p class="text-[14px] text-gray-500">{{ searchResults().length }} results</p>
+              <a href="#" class="text-[14px] text-gray-500 hover:opacity-60 duration-300">View all</a>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 md:max-h-[50vh] md:overflow-y-auto">
+              @for (product of searchResults(); track product.id) {
+                <div class="group relative bg-[#F6F6F4] overflow-hidden cursor-pointer rounded-lg hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                  <div class="relative">
+                    <img
+                      [src]="product.thumbnail"
+                      [alt]="product.title"
+                      class="w-full aspect-[3.5/4] object-cover"
+                    />
+                    <button
+                      type="button"
+                      class="absolute bottom-3 right-3 w-8 h-8 bg-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 duration-300 hover:bg-gray-100"
+                      aria-label="Add to cart"
+                    >
+                      <i class="ph ph-plus text-[18px]"></i>
+                    </button>
+                  </div>
+                  <div class="p-3 bg-white">
+                    <p class="font-normal text-gray-900 text-[14px] mb-1">{{ product.title }}</p>
+                    <p class="text-gray-600 text-[13px]">${{ product.price }}</p>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </section>
+  }
 </header>
+
+@if (isMobileMenuOpen()) {
+  <div
+    [class]="'fixed inset-0 bg-white z-[70] overflow-y-auto md:hidden ' + (isMobileMenuClosing() ? 'animate-slide-out-left' : 'animate-slide-in-left')"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Mobile navigation"
+  >
+    <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200">
+      <img src="assets/Logo.svg" width="86" height="19" alt="Logo" />
+      <button
+        (click)="closeMobileMenu()"
+        class="text-[26px]"
+        aria-label="Close mobile menu"
+      >
+        <i class="ph ph-x"></i>
+      </button>
+    </div>
+
+    <div class="px-6 py-6">
+      <div class="border-b border-gray-200 py-4">
+        <button
+          class="w-full flex items-center justify-between text-left text-[15px] font-medium"
+          (click)="toggleShopSection()"
+        >
+        <div>
+          <a routerLink="/products" (click)="toggleMobileMenu()" class="hover:opacity-60 duration-300 cursor-pointer"> 
+            Shop
+          </a>
+        </div>
+          <i [class]="shopExpanded() ? 'ph ph-minus text-[20px]' : 'ph ph-plus text-[20px]'"></i>
+        </button>
+
+        @if (shopExpanded()) {
+          <div class="mt-4 pl-4 space-y-4">
+            
+            <div>
+              <button
+                class="w-full flex items-center justify-between text-left text-[13px] text-gray-500 tracking-wide mb-3"
+                (click)="toggleCategories()"
+              >
+                <span>Categories</span>
+                <i [class]="categoriesExpanded() ? 'ph ph-minus text-[15px]' : 'ph ph-plus text-[15px]'"></i>
+              </button>
+              
+              @if (categoriesExpanded()) {
+                <ul class="space-y-2 pl-4 text-[14px] border-l border-gray-300 ml-2">
+                  <li><a href="#" class="text-gray-500 hover:text-gray-900 duration-300">Bags</a></li>
+                  <li><a href="#" class="text-gray-500 hover:text-gray-900 duration-300">Clothing</a></li>
+                  <li><a href="#" class="text-gray-500 hover:text-gray-900 duration-300">Small Leather Goods</a></li>
+                  <li><a href="#" class="text-gray-500 hover:text-gray-900 duration-300">Accessories</a></li>
+                  <li><a href="#" class="text-gray-500 hover:text-gray-900 duration-300">Gifts</a></li>
+                  <li><a href="#" class="text-gray-500 hover:text-gray-900 duration-300">Shop All</a></li>
+                </ul>
+              }
+            </div>
+
+            <div>
+              <button
+                class="w-full flex items-center justify-between text-left text-[13px] text-gray-500  tracking-wide mb-3"
+                (click)="toggleFeatured()"
+              >
+                <span>Featured</span>
+                <i [class]="featuredExpanded() ? 'ph ph-minus text-[15px]' : 'ph ph-plus text-[15px]'"></i>
+              </button>
+              
+              @if (featuredExpanded()) {
+                <ul class="space-y-2 pl-4 text-[14px] border-l border-gray-300 ml-2">
+                  <li><a href="#" class="text-gray-500 hover:text-gray-900 duration-300">New Arrivals</a></li>
+                  <li><a href="#" class="text-gray-500 hover:text-gray-900 duration-300">Bestsellers</a></li>
+                  <li><a href="#" class="text-gray-500 hover:text-gray-900 duration-300">Trending Now</a></li>
+                  <li><a href="#" class="text-gray-500 hover:text-gray-900 duration-300">Loungewear</a></li>
+                </ul>
+              }
+            </div>
+
+            <div>
+              <button
+                class="w-full flex items-center justify-between text-left text-[13px] text-gray-500 tracking-wide mb-3"
+                (click)="toggleCollections()"
+              >
+                <span>Collections</span>
+                <i [class]="collectionsExpanded() ? 'ph ph-minus text-[15px]' : 'ph ph-plus text-[15px]'"></i>
+              </button>
+              
+              @if (collectionsExpanded()) {
+                <ul class="space-y-2 pl-4 text-[14px] border-l border-gray-300 ml-2">
+                  <li><a href="#" class="text-gray-500 hover:text-gray-900 duration-300">Party and events</a></li>
+                  <li><a href="#" class="text-gray-500 hover:text-gray-900 duration-300">Office looks</a></li>
+                  <li><a href="#" class="text-gray-500 hover:text-gray-900 duration-300">Selection</a></li>
+                  <li><a href="#" class="text-gray-500 hover:text-gray-900 duration-300">Online Exclusive</a></li>
+                  <li><a href="#" class="text-gray-500 hover:text-gray-900 duration-300">Knitwear</a></li>
+                  <li><a href="#" class="text-gray-500 hover:text-gray-900 duration-300">Total Look</a></li>
+                  <li><a href="#" class="text-gray-500 hover:text-gray-900 duration-300">Basics</a></li>
+                </ul>
+              }
+            </div>
+          </div>
+        }
+      </div>
+
+      <div class="border-b border-gray-200 py-4">
+        <a href="#" class="flex items-center justify-between text-[15px] font-medium">
+          <span>New Arrivals</span>
+          <i class="ph ph-plus text-[20px]"></i>
+        </a>
+      </div>
+
+      <div class="border-b border-gray-200 py-4">
+        <a href="#" class="flex items-center justify-between text-[15px] font-medium">
+          <span>Sales</span>
+          <i class="ph ph-plus text-[20px]"></i>
+        </a>
+      </div>
+
+      <div class="border-b border-gray-200 py-4">
+        <a href="#" (click)="toggleMobileMenu()" class="flex items-center justify-between text-[15px] font-medium">
+          <span>Journal</span>
+          <i class="ph ph-plus text-[20px]"></i>
+        </a>
+      </div>
+
+      <div class="mt-6 space-y-4">
+        <a href="#" (click)="toggleMobileMenu()" class="block text-[14px]">Account</a>
+        <a href="#" (click)="toggleMobileMenu()" class="block text-[14px]">Stores</a>
+      </div>
+    </div>
+  </div>
+}
+
+@if (isHoverMenuOpen() && !isSearchOverlayOpen()) {
+  <div
+    class="hidden md:block fixed left-0 right-0 bottom-0 top-[80px] bg-black/20 backdrop-blur-sm z-30"
+    aria-hidden="true"
+  ></div>
+}
+
+@if (isSearchOverlayOpen()) {
+  <div
+    [class]="'fixed left-0 right-0 bottom-0 top-[80px] bg-black/20 backdrop-blur-sm z-30 
+    ' + (searchQuery() ? 'max-md:hidden' : '')"
+    (click)="closeSearchOverlay()"
+    aria-hidden="true"
+  ></div>
+}

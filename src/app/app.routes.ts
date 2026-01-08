@@ -15,6 +15,11 @@ export const routes: Routes = [
         path: 'dashboard',
         loadComponent: () =>
           import('./dashboard/dashboard').then(m => m.Dashboard)
+      },
+      {
+        path: 'products',
+        loadComponent: () =>
+          import('./features/products/products').then(m => m.Products)
       }
     ]
   },
@@ -29,17 +34,5 @@ export const routes: Routes = [
     path: 'login',
     loadComponent: () =>
       import('./login/login').then(m => m.Login)
-  },
-  
-// {
-//   path: 'discount',
-//   loadComponent: () =>
-//     import('shared/modals/discount/modal/modal').then(m => m.Modal)
-// },
-
-  {
-    path: 'products',
-    loadComponent: () =>
-      import('./features/products/products').then(m => m.Products)
   }
 ];

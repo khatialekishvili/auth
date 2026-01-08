@@ -9,6 +9,7 @@
 @import "swiper/css";
 @import "swiper/css/navigation";
 @import "swiper/css/pagination";
+@import './styles/minimal-forms.scss';
 
 html {
   @include mat.theme((
@@ -86,4 +87,46 @@ swiper-container::part(bullet-active) {
   padding: 0 !important;
   border-radius: 0 !important;
   overflow: hidden !important;
+}
+
+// Mobile bottom sheet slide-up animation
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.3s ease-out;
+}
+
+
+
+@keyframes slide-in-left {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.animate-slide-in-left {
+  animation: slide-in-left 0.3s ease-out;
+}
+
+@keyframes slide-out-left {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+.animate-slide-out-left {
+  animation: slide-out-left 0.3s ease-in;
 }

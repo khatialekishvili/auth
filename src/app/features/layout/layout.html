@@ -1,6 +1,13 @@
-<div class="w-full bg-black text-white text-center text-xs py-2">
-  Complimentary U.S. No-Rush Shipping on orders of $95+  
+<div class="announcement-bar">
+  <div class="marquee-wrapper">
+    <div class="marquee-content" aria-hidden="true">
+      @for (item of repeatCount; track $index) {
+        <span class="announcement-item">{{ announcementText }}</span>
+      }
+    </div>
+  </div>
 </div>
+
 
 <app-header />
 <main class="min-h-screen page-content" [class.is-blurred]="uiState.searchOverlayActive()">

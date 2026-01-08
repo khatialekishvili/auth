@@ -1,0 +1,67 @@
+<div class="group">
+  <div class="relative mb-4 overflow-hidden bg-gray-50 aspect-[3/4]">
+    <img
+      [src]="product().thumbnail || product().images[0]"
+      [alt]="product().title"
+      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+    
+    <button 
+      type="button"
+      (click)="toggleWishlist(product().id)"
+      class="absolute top-3 right-3 w-9 h-9 bg-white rounded-full flex items-center justify-center
+             hover:bg-gray-200 transition-colors z-10"
+      [attr.aria-label]="isInWishlist(product().id) ? 'Remove from wishlist' : 'Add to wishlist'"
+    >
+      <i
+        class="ph text-[20px] transition-transform duration-200"
+        [class.ph-heart]="!isInWishlist(product().id)"
+        [class.ph-heart-fill]="isInWishlist(product().id)"
+        [class.scale-110]="isInWishlist(product().id)"
+      ></i>
+    </button>
+
+    <div class="hidden md:block absolute bottom-0 left-0 right-0 
+                bg-white/80 py-4 px-4
+                opacity-0 group-hover:opacity-100 
+                transition-opacity duration-300">
+      <div class="flex items-end justify-between">
+        <div>
+          <p class="text-[13px] font-medium mb-2">{{ getColorName(product().id) }}</p>
+          <div class="flex gap-2">
+            @for (color of colors; track $index) {
+              <button 
+                (click)="selectColor(product().id, $index)"
+                [class]="'w-6 h-6 rounded-full ' + color.bg + ' border-2 transition-all ' + 
+                         (getColorIndex(product().id) === $index ? color.border : 'border-gray-300 hover:border-black')"
+                [attr.aria-label]="color.name"
+              ></button>
+            }
+          </div>
+        </div>
+        
+        <button 
+          (click)="addToCart(product().id)"
+          class="w-9 h-9 bg-transparent text-gray-600 
+                 flex items-center justify-center 
+                 hover:text-black transition-colors"
+          aria-label="Quick add to cart"
+        >
+          <i 
+            [class.rotate-180]="isRecentlyAdded(product().id)"
+            class="ph ph-plus text-[20px] transition-transform duration-300">
+          </i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <h3 class="text-[14px] font-normal mb-1 hover:opacity-60 transition-opacity cursor-pointer">
+      {{ product().title }}
+    </h3>
+    <p class="text-[14px] font-medium">
+      ${{ product().price }}
+    </p>
+  </div>
+</div>
+

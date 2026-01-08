@@ -1,6 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from 'shared/services/auth.service';
 import { errorMsg } from 'shared/pipes/errorMsg';
 
@@ -17,6 +17,7 @@ import { SnackbarService } from 'shared/services/snackbar.service';
   selector: 'app-login',
   imports: [
     ReactiveFormsModule,
+    RouterLink,
     errorMsg,
     MatFormFieldModule,
     MatInputModule,
@@ -25,7 +26,6 @@ import { SnackbarService } from 'shared/services/snackbar.service';
     MatSnackBarModule
   ],
   templateUrl: './login.html',
-  styleUrl: './login.scss',
 })
 export class Login {
   private fb = inject(FormBuilder);

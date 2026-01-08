@@ -15,4 +15,22 @@ export class SupabaseService {
   get client() {
     return this.supabase;
   }
+
+  async uploadFile(file: File, bucket: string = 'uploads') {
+    const filePath = `${Date.now()}_${file.name}`;
+    
+    // Supabase JS-ს არ აქვს ჩაშენებული პროგრესის observable მარტივი ატვირთვისთვის,
+    // ამიტომ აქ ვიყენებთ მარტივ Promise-ს.
+    const { data, error } = await this.supabase.storage
+      .from(bucket)
+      .upload(filePath, file);
+
+    if (error) throw error;
+    return data;
+  }
+  
+  get user() {
+    return this.supabase.auth.getUser();
+  }
+
 }

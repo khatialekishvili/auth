@@ -1,37 +1,37 @@
 export const registerValidationMessages = {
   username: {
-    required: 'მომხმარებლის სახელი სავალდებულოა',
-    minlength: 'მინიმუმ 3 სიმბოლოა საჭირო'
+    required: 'Username is required',
+    minlength: 'Minimum 3 characters are required'
   },
 
   email: {
-    required: 'იმეილი სავალდებულოა',
-    email: 'არასწორი ელფოსტის ფორმატი'
+    required: 'Email is required',
+    email: 'Invalid email format'
   },
 
   birth_date: {
-    required: 'დაბადების თარიღი სავალდებულოა',
-    min: 'უნდა იყოთ 18 წლის ან მეტის'
+    required: 'Birth date is required',
+    min: 'Must be at least 18 years old'
   },
 
   password: {
-    required: 'პაროლი სავალდებულოა',
-    minlength: 'პაროლი უნდა შეიცავდეს მინ. 6 სიმბოლოს'
+    required: 'Password is required',
+    minlength: 'Password must be at least 6 characters'
   },
 
   confirm_password: {
-    required: 'გაიმეორე პაროლი',
-    mismatch: 'პაროლები არ ემთხვევა'
+    required: 'Confirm password is required',
+    mismatch: 'Passwords do not match'
   }
 };
 
 export const loginValidationMessages = {
   email: {
-    required: 'იმეილი სავალდებულოა',
-    email: 'არასწორი ელფოსტის ფორმატი'
+    required: 'Email is required',
+    email: 'Invalid email format'
   },
 
   password: {
-    required: 'პაროლი სავალდებულოა'
+    required: 'Password is required'
   }
 };

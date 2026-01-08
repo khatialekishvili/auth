@@ -5,8 +5,7 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { switchMap, EMPTY } from 'rxjs';
-
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from 'shared/services/auth.service';
 import { adultValidator, matchPasswords } from 'shared/services/validators.service';
 import { errorMsg } from 'shared/pipes/errorMsg';
@@ -30,6 +29,7 @@ export function formatISODate(date: string): string {
 @Component({
   imports: [
     ReactiveFormsModule,
+    RouterLink,
     errorMsg,
     MatFormFieldModule,
     MatInputModule,
@@ -41,7 +41,6 @@ export function formatISODate(date: string): string {
     MatSnackBarModule
   ],
   templateUrl: './register.html',
-  styleUrl: './register.scss',
 })
 export class Register {
   private fb = inject(FormBuilder);
@@ -81,7 +80,7 @@ register() {
   this.auth.checkUsername(username!).pipe(
       switchMap(({ data }) => {
         if (data) {
-          this.snackbar.error('მომხმარებლის სახელი უკვე არსებობს, აირჩიე სხვა.');
+          this.snackbar.error('Username already exists, please choose another.');
           return EMPTY;
         }
 
@@ -96,7 +95,7 @@ register() {
         return;
       }
 
-      this.snackbar.success('რეგისტრაცია წარმატებით დასრულდა', 'OK');
+      this.snackbar.success('Registration successful!', 'OK');
       this.router.navigateByUrl('/login');
     });
 }

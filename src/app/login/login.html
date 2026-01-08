@@ -1,59 +1,82 @@
-<div class="min-h-screen flex items-center justify-center bg-gray-100">
-  <div class="w-full max-w-md bg-white rounded-2xl shadow-xl p-8 space-y-10">
-    <h2 class="text-3xl font-bold text-center text-gray-800 mb-6">ავტორიზაცია</h2>
+<div class="min-h-screen flex">
+  <div class="hidden lg:block lg:w-1/2 relative overflow-hidden">
+    <img 
+      src="assets/hero1.png" 
+      alt="Fashion" 
+      class="absolute inset-0 w-full h-full object-cover"
+    />
+  </div>
 
-    <form [formGroup]="form" (ngSubmit)="login()" class="space-y-5">
-
-      <div>
-        <mat-form-field appearance="fill" class="w-full rounded-md">
-          <mat-label>იმეილი</mat-label>
-          <input
-            matInput
-            id="email"
-            type="email"
-            formControlName="email"
-            placeholder="example@mail.com"
-          />
-          @if (formControls.email.touched && formControls.email.errors) {
-            <mat-error class="text-red-500 text-sm mt-1">
-              {{ formControls.email.errors | errorMsg: errors.email }}
-            </mat-error>
-          }
-        </mat-form-field>
+  <div class="w-full lg:w-1/2 flex items-center justify-center bg-white px-6 sm:px-12 py-12">
+    <div class="w-full max-w-md">
+      <div class="mb-10">
+        <h2 class="font-styrene text-[28px] font-normal text-black mb-1 uppercase tracking-wide">
+          Login
+        </h2>
       </div>
 
-      <div>
-        <mat-form-field appearance="fill" class="w-full rounded-md">
-          <mat-label>პაროლი</mat-label>
+      <form [formGroup]="form" (ngSubmit)="login()" class="space-y-6">
+
+      <div class="form-field-minimal">
+        <label for="email">
+          Email <span class="text-red-500">*</span>
+        </label>
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+        />
+        @if (formControls.email.touched && formControls.email.errors) {
+          <p class="text-red-500">
+            {{ formControls.email.errors | errorMsg: errors.email }}
+          </p>
+        }
+      </div>
+
+      <div class="form-field-minimal">
+        <label for="password">
+          Password <span class="text-red-500">*</span>
+        </label>
+        <div class="relative">
           <input
-            matInput
             id="password"
             type="{{ hidePassword() ? 'password' : 'text' }}"
             formControlName="password"
-            placeholder="შეიყვანე პაროლი"
           />
-          <button mat-icon-button matSuffix type="button" (click)="hidePassword.set(!hidePassword())">
-            <mat-icon>{{ hidePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+          <button 
+            type="button" 
+            (click)="hidePassword.set(!hidePassword())"
+          >
+            <mat-icon>
+              {{ hidePassword() ? 'visibility_off' : 'visibility' }}
+            </mat-icon>
           </button>
-
-          @if (formControls.password.touched && formControls.password.errors) {
-            <mat-error class="text-red-500 text-sm mt-1">
-              {{ formControls.password.errors | errorMsg: errors.password }}
-            </mat-error>
-          }
-        </mat-form-field>
+        </div>
+        @if (formControls.password.touched && formControls.password.errors) {
+          <p class="text-red-500">
+            {{ formControls.password.errors | errorMsg: errors.password }}
+          </p>
+        }
       </div>
 
       <button
-        mat-raised-button
-        color="primary"
         type="submit"
         [disabled]="form.invalid"
-        class="w-full py-2 text-lg font-medium bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition disabled:bg-gray-400 disabled:cursor-not-allowed"
+        class="w-full py-4 text-[13px] font-medium tracking-wide uppercase bg-black text-white 
+               hover:opacity-80 duration-300 transition-opacity
+               disabled:bg-gray-300 disabled:cursor-not-allowed disabled:opacity-50"
       >
-        შესვლა
+        Login
       </button>
 
+      <div class="text-center pt-6">
+        <p class="text-[13px] text-[#666]">
+          Don't have an account? 
+          <a routerLink="/register" class="text-black font-medium hover:opacity-60 duration-300 underline">
+            Create Account
+          </a>
+        </p>
+      </div>
     </form>
   </div>
 </div>

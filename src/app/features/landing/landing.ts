@@ -1,14 +1,14 @@
-import { Component, signal, inject, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Component, signal, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ProductService } from 'shared/services/product.service';
 import { Modal } from 'shared/modals/discount/modal/modal';
 import { HoverElevateDirective } from 'shared/directives/hover-elevate.directive';
+import { ProductSwiper } from 'shared/components/product-swiper/product-swiper';
 
 @Component({
   selector: 'app-landing',
-  imports: [HoverElevateDirective],
+  imports: [HoverElevateDirective, ProductSwiper],
   templateUrl: './landing.html',
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class Landing {
   private productService = inject(ProductService);

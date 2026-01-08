@@ -5,7 +5,6 @@ import { MatDialogRef } from '@angular/material/dialog';
 @Component({
   selector: 'app-discount-modal',
   templateUrl: './modal.html',
-  styleUrls: ['./modal.scss'],
   imports: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -11,5 +11,8 @@ import { UiStateService } from 'shared/services/ui-state.service';
   styleUrl: './layout.scss',
 })
 export class Layout {
+  announcementText = 'Complimentary U.S. No-Rush Shipping on orders of $95+';
+  repeatCount = Array(10).fill(0);
+  
   protected readonly uiState = inject(UiStateService);
 }

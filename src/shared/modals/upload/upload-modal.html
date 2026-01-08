@@ -1,0 +1,131 @@
+
+<section class="overlay" role="presentation">
+  <div
+    class="dialog"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="upload-title"
+    [class.dialog--dragging]="dragging()"
+    [class.dialog--pulse]="openAnim()"
+  >
+    <header class="dialog__header">
+      <div class="chrome chrome--top">
+        <button type="button" class="icon-btn icon-btn--resize" aria-label="Resize dialog">
+          <mat-icon fontIcon="open_in_full" aria-hidden="true"></mat-icon>
+        </button>
+        <!-- <div class="chrome__spacer" aria-hidden="true"></div> -->
+        <button
+          type="button"
+          class="icon-btn icon-btn--close"
+          aria-label="Close upload dialog"
+          (click)="handleClose()"
+        >
+          <mat-icon fontIcon="close" aria-hidden="true"></mat-icon>
+        </button>
+      </div>
+    </header>
+    <div class="dialog__titles">
+      <h2 id="upload-title">Upload your files</h2>
+      <p class="subhead">to attach to a project</p>
+    </div>
+
+    <div
+      class="dropzone"
+      [class.dropzone--drag]="dragging()"
+      [class.dropzone--uploading]="isUploading()"
+      [class.dropzone--open]="dragging() || openAnim()"
+      (dragover)="onDragOver($event)"
+      (dragleave)="onDragLeave($event)"
+      (drop)="onDrop($event)"
+    >
+      <label class="dropzone__click" role="button" aria-label="Choose files to upload">
+        <div class="dropzone__icon">
+          <span class="folder" aria-hidden="true"></span>
+          <span class="lid" aria-hidden="true"></span>
+          @if (isUploading()) {
+            <span class="arrow" aria-hidden="true"></span>
+          } @else {
+            <span class="plus" aria-hidden="true"></span>
+          }
+        </div>
+        <!-- <p class="dropzone__title">Drop files here</p> -->
+        <p class="dropzone__hint">Drag & drop your files here or click the icon</p>
+        <p class="dropzone__hint small">5 MB max file size · JPG, PDF, DOC, DOCX</p>
+        <input
+          class="visually-hidden"
+          type="file"
+          [attr.multiple]="mode() === 'multi' ? '' : null"
+          accept=".jpg,.jpeg,.pdf,.doc,.docx"
+          (change)="onFileInput($event)"
+          aria-label="Choose files to upload"
+        />
+      </label>
+    </div>
+
+    <section class="list" aria-live="polite">
+      @if (files().length > 0) {
+        @for (item of files(); track item.id) {
+          <article class="file" [class.file--error]="item.status === 'error'">
+            <div class="file__badge" [attr.data-kind]="item.kind">{{ badgeLabel(item.kind) }}</div>
+            <div class="file__body">
+              <div class="file__row">
+                <p class="file__name">{{ item.name }}</p>
+                <p class="file__size">{{ formatSize(item.size) }}</p>
+              </div>
+              <div class="file__row file__row--status">
+                <p class="file__status">
+                  @if (item.status === 'error' && item.error) {
+                    {{ item.error }}
+                  } @else if (item.status === 'done') {
+                    Done
+                  } @else if (item.status === 'uploading') {
+                    Uploading…
+                  } @else {
+                    Waiting
+                  }
+                </p>
+                @if (item.status === 'uploading') {
+                  <span class="spinner" aria-hidden="true"></span>
+                }
+              </div>
+              @if (item.status !== 'done') {
+                <div
+                  class="progress"
+                  role="progressbar"
+                  [attr.aria-valuenow]="item.progress"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                >
+                  <div class="progress__bar" [style.width.%]="item.progress"></div>
+                </div>
+              }
+            </div>
+            <button
+              type="button"
+              class="icon-btn"
+              aria-label="Remove file"
+              (click)="remove(item.id)"
+              [disabled]="item.status === 'uploading'"
+            >
+              <mat-icon fontIcon="close" aria-hidden="true"></mat-icon>
+            </button>
+          </article>
+        }
+      }
+    </section>
+    @if (files().length > 0) {
+      <section class="actions">
+        <button type="button" class="btn" (click)="handleClose()">Cancel</button>
+        <button
+          type="button"
+          class="btn btn--primary"
+          (click)="submit()"
+          [disabled]="!canSubmit() || isUploading()"
+        >
+          Submit
+        </button>
+      </section>
+    }
+  </div>
+</section>
+

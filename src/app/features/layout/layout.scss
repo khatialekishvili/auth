@@ -3,6 +3,36 @@
   transition: filter 180ms ease, opacity 180ms ease;
 }
 
-.page-content.is-blurred {
-  filter: blur(4px);
+.announcement-bar {
+  background-color: #000000;
+  color: white;
+  padding: 10px 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.marquee-wrapper {
+  display: flex;
+  width: fit-content;
+  animation: scroll 20s linear infinite;
+}
+
+.marquee-content {
+  display: flex;
+  flex-shrink: 0;
+  white-space: nowrap;
+  
+  .announcement-item {
+    padding: 0 3rem;
+    display: inline-block;
+  }
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
 }

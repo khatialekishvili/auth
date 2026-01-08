@@ -1,112 +1,161 @@
-<div class="min-h-screen flex items-center justify-center bg-gray-100">
-  <div class="w-full max-w-md bg-white rounded-2xl shadow-xl p-8 space-y-10">
-    <h2 class="text-3xl font-bold text-center text-gray-800 mb-6">რეგისტრაცია</h2>
-    <form [formGroup]="form" (ngSubmit)="register()" class="space-y-5">
+<div class="min-h-screen flex">
+  <div class="hidden lg:block lg:w-1/2 relative overflow-hidden">
+    <img 
+      src="assets/hero1.png" 
+      alt="Fashion" 
+      class="absolute inset-0 w-full h-full object-cover"
+    />
+  </div>
 
-      <div>
-        <mat-form-field appearance="fill" class="w-full rounded-md">
-          <mat-label>მომხმარებლის სახელი</mat-label>
-          <input
-            matInput
-            id="username"
-            type="text"
-            formControlName="username"
-            placeholder="ჩაწერე მომხმარებლის სახელი"
-          />
-          @if (formControls.username.touched && formControls.username.errors) {
-            <mat-error class="text-red-500 text-sm mt-1">
-              {{ formControls.username.errors | errorMsg: errors.username }}
-            </mat-error>
-          }
-        </mat-form-field>
+  <div class="w-full lg:w-1/2 flex items-center justify-center bg-white px-6 sm:px-12 py-12">
+    <div class="w-full max-w-md">
+      <div class="mb-10">
+        <h2 class="font-styrene text-[28px] font-normal text-black mb-1 uppercase tracking-wide">
+          Create Account
+        </h2>
       </div>
 
-      <div>
-        <mat-form-field appearance="fill" class="w-full rounded-md">
-          <mat-label>იმეილი</mat-label>
-          <input
-            matInput
-            id="email"
-            type="email"
-            formControlName="email"
-            placeholder="example@mail.com"
-          />
-          @if (formControls.email.touched && formControls.email.errors) {
-            <mat-error class="text-red-500 text-sm mt-1">
-              {{ formControls.email.errors | errorMsg: errors.email }}
-            </mat-error>
-          }
-        </mat-form-field>
+      <form [formGroup]="form" (ngSubmit)="register()" class="space-y-6">
+
+      <div class="form-field-minimal">
+        <label for="username">
+          Username <span class="text-red-500">*</span>
+        </label>
+        <input
+          id="username"
+          type="text"
+          formControlName="username"
+        />
+        @if (formControls.username.touched && formControls.username.errors) {
+          <p class="text-red-500">
+            {{ formControls.username.errors | errorMsg: errors.username }}
+          </p>
+        }
       </div>
 
-      <div>
-        <mat-form-field appearance="fill" class="w-full rounded-md">
-          <mat-label>დაბადების თარიღი</mat-label>
-          <input matInput [matDatepicker]="picker" id="birth_date" formControlName="birth_date" placeholder="აირჩიე თარიღი" />
-          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <div class="form-field-minimal">
+        <label for="email">
+          Email <span class="text-red-500">*</span>
+        </label>
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+        />
+        @if (formControls.email.touched && formControls.email.errors) {
+          <p class="text-red-500">
+            {{ formControls.email.errors | errorMsg: errors.email }}
+          </p>
+        }
+      </div>
+
+      <div class="form-field-minimal">
+        <label for="birth_date">
+          Date of Birth <span class="text-red-500">*</span>
+        </label>
+        <div class="relative">
+          <input 
+            matInput 
+            [matDatepicker]="picker"
+            (click)="picker.open()" 
+            id="birth_date" 
+            formControlName="birth_date"
+          />
+          <button 
+            type="button"
+            (click)="picker.open()"
+          >
+            <mat-icon>calendar_today</mat-icon>
+          </button>
           <mat-datepicker #picker></mat-datepicker>
-          @if (formControls.birth_date.touched && formControls.birth_date.errors) {
-            <mat-error class="text-red-500 text-sm mt-1">
-              {{ formControls.birth_date.errors | errorMsg: errors.birth_date }}
-            </mat-error>
-          }
-        </mat-form-field>
+        </div>
+        @if (formControls.birth_date.touched && formControls.birth_date.errors) {
+          <p class="text-red-500">
+            {{ formControls.birth_date.errors | errorMsg: errors.birth_date }}
+          </p>
+        }
       </div>
 
-      <div>
-        <mat-form-field appearance="fill" class="w-full rounded-md">
-          <mat-label>პაროლი</mat-label>
+      <div class="form-field-minimal">
+        <label for="password">
+          Password <span class="text-red-500">*</span>
+        </label>
+        <div class="relative">
           <input
-            matInput
             id="password"
             type="{{ hidePassword() ? 'password' : 'text' }}"
             formControlName="password"
-            placeholder="მინ. 6 სიმბოლო"
           />
-          <button mat-icon-button matSuffix type="button" (click)="hidePassword.set(!hidePassword())">
-            <mat-icon>{{ hidePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+          <button 
+            type="button" 
+            (click)="hidePassword.set(!hidePassword())"
+          >
+            <mat-icon>
+              {{ hidePassword() ? 'visibility_off' : 'visibility' }}
+            </mat-icon>
           </button>
-          @if (formControls.password.touched && formControls.password.errors) {
-            <mat-error class="text-red-500 text-sm mt-1">
-              {{ formControls.password.errors | errorMsg: errors.password }}
-            </mat-error>
-          }
-        </mat-form-field>
+        </div>
+        @if (formControls.password.touched && formControls.password.errors) {
+          <p class="text-red-500">
+            {{ formControls.password.errors | errorMsg: errors.password }}
+          </p>
+        }
       </div>
 
-      <div>
-        <mat-form-field appearance="fill" class="w-full rounded-md">
-          <mat-label>გაიმეორე პაროლი</mat-label>
+      <div class="form-field-minimal">
+        <label for="confirm_password">
+          Confirm Password <span class="text-red-500">*</span>
+        </label>
+        <div class="relative">
           <input
-            matInput
             id="confirm_password"
             type="{{ hideConfirmPassword() ? 'password' : 'text' }}"
             formControlName="confirm_password"
-            placeholder="გაიმეორე პაროლი"
           />
-          <button mat-icon-button matSuffix type="button" (click)="hideConfirmPassword.set(!hideConfirmPassword())">
-            <mat-icon>{{ hideConfirmPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+          <button 
+            type="button" 
+            (click)="hideConfirmPassword.set(!hideConfirmPassword())"
+          >
+            <mat-icon>
+              {{ hideConfirmPassword() ? 'visibility_off' : 'visibility' }}
+            </mat-icon>
           </button>
-            <!-- <mat-icon matSuffix (click)="hideConfirmPassword = !hideConfirmPassword">
-                {{ hideConfirmPassword ? 'visibility_off' : 'visibility' }}
-            </mat-icon> -->
-          @if (formControls.confirm_password.touched && formControls.confirm_password.errors) {
-            <mat-error class="text-red-500 text-sm mt-1">
-              {{ formControls.confirm_password.errors | errorMsg: errors.confirm_password }}
-            </mat-error>
-          }
-        </mat-form-field>
+        </div>
+        @if (formControls.confirm_password.touched && formControls.confirm_password.errors) {
+          <p class="text-red-500">
+            {{ formControls.confirm_password.errors | errorMsg: errors.confirm_password }}
+          </p>
+        }
+      </div>
+
+      <div class="pt-4">
+        <p class="text-[11px] text-[#666] leading-relaxed">
+          By clicking "Accept and Continue", I confirm that I have read and accept the 
+          <a href="#" class="text-black underline hover:opacity-60">Terms and Conditions of use and purchase</a>, 
+          and I understand the information on the use of my personal data provided in the 
+          <a href="#" class="text-black underline hover:opacity-60">Privacy Policy</a>.
+        </p>
       </div>
 
       <button
-        mat-raised-button
-        color="primary"
         type="submit"
         [disabled]="form.invalid"
-        class="w-full py-2 text-lg font-medium bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition disabled:bg-gray-400 disabled:cursor-not-allowed"
+        class="w-full py-4 text-[13px] font-medium tracking-wide uppercase bg-black text-white 
+               hover:opacity-80 duration-300 transition-opacity
+               disabled:bg-gray-300 disabled:cursor-not-allowed disabled:opacity-50"
       >
-        რეგისტრაცია
+        Accept and Continue
       </button>
+
+      <div class="text-center pt-6">
+        <p class="text-[13px] text-[#666]">
+          Already have an account? 
+          <a routerLink="/login" class="text-black font-medium hover:opacity-60 duration-300 underline">
+            Login
+          </a>
+        </p>
+      </div>
     </form>
+    </div>
   </div>
 </div>
