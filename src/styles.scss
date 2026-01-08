@@ -10,6 +10,7 @@
 @import "swiper/css/navigation";
 @import "swiper/css/pagination";
 @import './styles/minimal-forms.scss';
+@import './styles/_index.scss';
 
 html {
   @include mat.theme((
@@ -89,7 +90,6 @@ swiper-container::part(bullet-active) {
   overflow: hidden !important;
 }
 
-// Mobile bottom sheet slide-up animation
 @keyframes slide-up {
   from {
     transform: translateY(100%);

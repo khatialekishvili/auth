@@ -1,4 +1,5 @@
-import { Component, inject, signal, HostListener } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
+import { MatMenuModule } from '@angular/material/menu';
 import { ProductService } from 'shared/services/product.service';
 import { Product } from 'shared/models/product.models';
 import { PRODUCT_CATEGORIES, SORT_OPTIONS } from 'shared/constants/product-options';
@@ -6,7 +7,7 @@ import { ProductCard } from 'shared/components/product-card/product-card';
 
 @Component({
   selector: 'app-products',
-  imports: [ProductCard],
+  imports: [ProductCard, MatMenuModule],
   templateUrl: './products.html',
 })
 export class Products {
@@ -14,8 +15,8 @@ export class Products {
   
   readonly products = signal<Product[]>([]);
   readonly selectedCategory = signal('all');
-  readonly isSortDropdownOpen = signal(false);
   readonly selectedSort = signal('featured');
+  readonly isMobileSortOpen = signal(false);
   
   readonly categories = PRODUCT_CATEGORIES;
   readonly sortOptions = SORT_OPTIONS;
@@ -34,27 +35,18 @@ export class Products {
     this.selectedCategory.set(categoryId);
   }
 
-  toggleSortDropdown(): void {
-    this.isSortDropdownOpen.update(v => !v);
-  }
-
- 
-
   selectSort(sortId: string): void {
     this.selectedSort.set(sortId);
-    this.isSortDropdownOpen.set(false);
+    this.isMobileSortOpen.set(false);
     console.log('Selected sort:', sortId);
+  }
+
+  toggleMobileSort(): void {
+    this.isMobileSortOpen.update(v => !v);
   }
 
   getSortLabel(): string {
     const option = this.sortOptions.find(opt => opt.id === this.selectedSort());
     return option ? option.label : 'Featured';
-  }
-
-  onDocumentClick(event: MouseEvent): void {
-    const target = event.target as HTMLElement;
-    if (!target.closest('.sort-dropdown-container')) {
-      this.isSortDropdownOpen.set(false);
-    }
   }
 }

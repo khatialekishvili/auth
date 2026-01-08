@@ -1,20 +1,26 @@
-import { Component, inject, signal, viewChild, ElementRef } from '@angular/core';
+import { Component, inject, signal, DestroyRef } from '@angular/core';
 import { NgOptimizedImage } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ProductService } from 'shared/services/product.service';
 import { WishlistService } from 'shared/services/wishlist.service';
 import { CartService } from 'shared/services/cart.service';
-import { Product } from 'shared/models/product.models';
+import { Product, NAV_ITEMS } from 'shared';
 
 @Component({
   selector: 'app-header',
-  imports: [NgOptimizedImage, RouterLink],
+  imports: [NgOptimizedImage, RouterLink, ReactiveFormsModule],
   templateUrl: './header.html',
 })
 export class Header {
   private readonly productService = inject(ProductService);
+  private readonly destroyRef = inject(DestroyRef);
   readonly wishlistService = inject(WishlistService);
   readonly cartService = inject(CartService);
+
+  readonly navItems = NAV_ITEMS;
 
   readonly isHoverMenuOpen = signal(false);
   
@@ -29,14 +35,32 @@ export class Header {
   readonly searchQuery = signal('');
   readonly searchResults = signal<Product[]>([]);
   private allProducts = signal<Product[]>([]);
-  
-  searchInput = viewChild<ElementRef<HTMLInputElement>>('searchInput');
+
+  searchControl = new FormControl('', { nonNullable: true });
 
   constructor() {
     this.productService.getAllWomen().subscribe(data => {
       this.allProducts.set(data);
     });
+
+    this.searchControl.valueChanges
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(query => {
+        this.searchQuery.set(query);
+        this.performSearch(query);
+      });
   }
+
+  closeAllOverlays(): void {
+    this.closeSearchOverlay();
+    this.closeHoverMenu();
+  }
+  
+  
 
   private toggleBodyScroll(): void {
     const hasQuery = !!this.searchQuery();
@@ -106,28 +130,20 @@ export class Header {
 
   openSearchOverlay(): void {
     this.isSearchOverlayOpen.set(true);
-    this.searchQuery.set('');
+    this.searchControl.setValue('');
     this.searchResults.set([]);
-    
-    setTimeout(() => {
-      this.searchInput()?.nativeElement.focus();
-    }, 100);
   }
 
   closeSearchOverlay(): void {
     this.isSearchOverlayOpen.set(false);
-    this.searchQuery.set('');
+    this.searchControl.setValue('');
     this.searchResults.set([]);
     this.toggleBodyScroll();
   }
 
   clearSearch(): void {
-    this.searchQuery.set('');
-    this.searchResults.set([]);
+    this.searchControl.setValue('');
     this.toggleBodyScroll();
-    setTimeout(() => {
-      this.searchInput()?.nativeElement.focus();
-    }, 0);
   }
 
   toggleSearchOverlay(): void {
@@ -138,20 +154,18 @@ export class Header {
     }
   }
 
-  onSearchInput(event: Event): void {
-    const target = event.target as HTMLInputElement;
-    const query = target.value.toLowerCase().trim();
+  private performSearch(query: string): void {
+    const trimmedQuery = query.toLowerCase().trim();
     
-    this.searchQuery.set(target.value);
     this.toggleBodyScroll();
     
-    if (!query) {
+    if (!trimmedQuery) {
       this.searchResults.set([]);
       return;
     }
 
     const results = this.allProducts().filter(product =>
-      product.title.toLowerCase().includes(query)
+      product.title.toLowerCase().includes(trimmedQuery)
     );
     
     this.searchResults.set(results);
