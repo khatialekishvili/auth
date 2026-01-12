@@ -8,11 +8,11 @@
           @for (category of categories; track category.id) {
             <button
               (click)="selectCategory(category.id)"
-              [class.bg-black]="selectedCategory() === category.id"
-              [class.text-white]="selectedCategory() === category.id"
-              [class.bg-white]="selectedCategory() !== category.id"
-              [class.text-black]="selectedCategory() !== category.id"
-              class="px-6 py-2 rounded-full border border-gray-300 text-[14px] font-medium 
+              [ngClass]="{
+                'bg-black text-white': selectedCategory() === category.id,
+                'bg-white text-black': selectedCategory() !== category.id
+              }"
+              class="px-6 py-2 rounded-full border border-gray-300 text-sm font-medium 
                    transition-colors duration-400"
             >
               {{ category.label }}
@@ -24,11 +24,11 @@
           <button 
             #menuTrigger="matMenuTrigger"
             [matMenuTriggerFor]="sortMenu"
-            class="hidden md:flex text-[16px] font-medium hover:opacity-60 transition-opacity items-center gap-1">
+            class="hidden md:flex text-base font-medium hover:opacity-60 transition-opacity items-center gap-1">
             Sort 
             <i 
               [class.rotate-180]="menuTrigger.menuOpen"
-              class="ph ph-caret-down text-[20px] transition-transform duration-300">
+              class="ph ph-caret-down text-xl transition-transform duration-300">
             </i>
           </button>
           
@@ -37,10 +37,11 @@
               <button
                 mat-menu-item 
                 (click)="selectSort(option.id)"
-                [class.font-medium]="selectedSort() === option.id"
-                [class.text-black]="selectedSort() === option.id"
-                [class.text-gray-400]="selectedSort() !== option.id"
-                class="text-[14px]"
+                [ngClass]="{
+                  'font-medium text-black': selectedSort() === option.id,
+                  'text-gray-400': selectedSort() !== option.id
+                }"
+                class="text-sm"
               >
                 {{ option.label }}
               </button>
@@ -49,15 +50,15 @@
 
           <button 
             (click)="toggleMobileSort()"
-            class="md:hidden text-[16px] font-medium hover:opacity-60 transition-opacity flex items-center gap-1">
+            class="md:hidden text-base font-medium hover:opacity-60 transition-opacity flex items-center gap-1">
             Sort 
             <i 
               [class.rotate-180]="isMobileSortOpen()"
-              class="ph ph-caret-down text-[20px] transition-transform duration-300">
+              class="ph ph-caret-down text-xl transition-transform duration-300">
             </i>
           </button>
 
-          <button class="text-[16px] font-medium hover:opacity-60 transition-opacity">
+          <button class="text-base font-medium hover:opacity-60 transition-opacity">
             Filter
           </button>
         </div>
@@ -87,7 +88,7 @@
 
     <div class="md:hidden fixed bottom-0 left-0 right-0 bg-white rounded-t-2xl z-50 animate-slide-up">
       <div class="flex items-center justify-between p-6 border-b border-gray-200">
-        <h3 class="text-[18px] font-medium">Sort</h3>
+        <h3 class="text-lg font-medium">Sort</h3>
         <button 
           (click)="toggleMobileSort()"
           class="w-8 h-8 flex items-center justify-center"
@@ -101,10 +102,11 @@
         @for (option of sortOptions; track option.id) {
           <button
             (click)="selectSort(option.id)"
-            [class.font-medium]="selectedSort() === option.id"
-            [class.text-black]="selectedSort() === option.id"
-            [class.text-gray-400]="selectedSort() !== option.id"
-            class="w-full text-left py-4 text-[16px] transition-colors"
+            [ngClass]="{
+              'font-medium text-black': selectedSort() === option.id,
+              'text-gray-400': selectedSort() !== option.id
+            }"
+            class="w-full text-left py-4 text-base transition-colors"
           >
             {{ option.label }}
           </button>

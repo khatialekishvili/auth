@@ -7,26 +7,30 @@
     
     <button 
       type="button"
+      mat-icon-button
+      (click)="openQuickView()"
+      class="!absolute top-3 left-3 !w-9 !h-9 !bg-white !rounded-full
+             hover:!bg-gray-200 !transition-colors z-10 !flex !items-center !justify-center"
+      aria-label="Quick view">
+      <mat-icon class="!text-xl !w-5 !h-5 !leading-5">visibility</mat-icon>
+    </button>
+
+    <button 
+      type="button"
       (click)="toggleWishlist(product().id)"
       class="absolute top-3 right-3 w-9 h-9 bg-white rounded-full flex items-center justify-center
              hover:bg-gray-200 transition-colors z-10"
       [attr.aria-label]="isInWishlist(product().id) ? 'Remove from wishlist' : 'Add to wishlist'"
-    >
-      <i
-        class="ph text-[20px] transition-transform duration-200"
-        [class.ph-heart]="!isInWishlist(product().id)"
-        [class.ph-heart-fill]="isInWishlist(product().id)"
-        [class.scale-110]="isInWishlist(product().id)"
-      ></i>
+      >
+      <mat-icon [class.text-red-500]="isInWishlist(product().id)">
+        {{ isInWishlist(product().id) ? 'favorite' : 'favorite_outline' }}
+      </mat-icon>
     </button>
 
-    <div class="hidden md:block absolute bottom-0 left-0 right-0 
-                bg-white/80 py-4 px-4
-                opacity-0 group-hover:opacity-100 
-                transition-opacity duration-300">
+    <div class="hidden md:block absolute bottom-0 left-0 right-0 bg-white/80 py-4 px-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
       <div class="flex items-end justify-between">
         <div>
-          <p class="text-[13px] font-medium mb-2">{{ getColorName(product().id) }}</p>
+          <p class="text-sm font-medium mb-2">{{ getColorName(product().id) }}</p>
           <div class="flex gap-2">
             @for (color of colors; track $index) {
               <button 
@@ -41,14 +45,12 @@
         
         <button 
           (click)="addToCart(product().id)"
-          class="w-9 h-9 bg-transparent text-gray-600 
-                 flex items-center justify-center 
-                 hover:text-black transition-colors"
+          class="w-9 h-9 bg-transparent text-gray-600 flex items-center justify-center hover:text-black transition-colors"
           aria-label="Quick add to cart"
         >
           <i 
             [class.rotate-180]="isRecentlyAdded(product().id)"
-            class="ph ph-plus text-[20px] transition-transform duration-300">
+            class="ph ph-plus text-xl transition-transform duration-300">
           </i>
         </button>
       </div>
@@ -56,10 +58,10 @@
   </div>
 
   <div>
-    <h3 class="text-[14px] font-normal mb-1 hover:opacity-60 transition-opacity cursor-pointer">
+    <h3 class="text-sm font-normal mb-1 hover:opacity-60 transition-opacity cursor-pointer">
       {{ product().title }}
     </h3>
-    <p class="text-[14px] font-medium">
+    <p class="text-sm font-medium">
       ${{ product().price }}
     </p>
   </div>

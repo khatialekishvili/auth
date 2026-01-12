@@ -14,6 +14,7 @@ export interface SwiperConfig {
   selector: 'app-product-swiper',
   imports: [ProductCard],
   templateUrl: './product-swiper.html',
+  styleUrl: './product-swiper.scss',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class ProductSwiper {

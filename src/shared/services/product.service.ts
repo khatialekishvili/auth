@@ -27,7 +27,7 @@ export class ProductService {
     }
  
     getJewellery(){
-        return this.http.get(`${this.base}/category/womens-jewellery`);
+        return this.http.get(`${this.base}/category/tops`);
     }
     
 

@@ -8,11 +8,13 @@ import { ProductService } from 'shared/services/product.service';
 import { WishlistService } from 'shared/services/wishlist.service';
 import { CartService } from 'shared/services/cart.service';
 import { Product, NAV_ITEMS } from 'shared';
+import { MatIcon } from "@angular/material/icon";
 
 @Component({
   selector: 'app-header',
-  imports: [NgOptimizedImage, RouterLink, ReactiveFormsModule],
+  imports: [NgOptimizedImage, RouterLink, ReactiveFormsModule, MatIcon],
   templateUrl: './header.html',
+  styleUrl: './header.scss',
 })
 export class Header {
   private readonly productService = inject(ProductService);
@@ -59,8 +61,6 @@ export class Header {
     this.closeSearchOverlay();
     this.closeHoverMenu();
   }
-  
-  
 
   private toggleBodyScroll(): void {
     const hasQuery = !!this.searchQuery();

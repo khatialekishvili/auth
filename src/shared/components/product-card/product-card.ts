@@ -1,15 +1,20 @@
 import { Component, input, inject, signal } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { WishlistService } from 'shared/services/wishlist.service';
 import { CartService } from 'shared/services/cart.service';
 import { Product } from 'shared/models/product.models';
 import { PRODUCT_COLORS } from 'shared/constants/product-options';
+import { ProductQuickView } from 'shared/components/product-quick-view/product-quick-view';
 
 @Component({
   selector: 'app-product-card',
-  imports: [],
+  imports: [MatButtonModule, MatIconModule],
   templateUrl: './product-card.html',
 })
 export class ProductCard {
+  private readonly dialog = inject(MatDialog);
   readonly wishlistService = inject(WishlistService);
   readonly cartService = inject(CartService);
   
@@ -59,6 +64,16 @@ export class ProductCard {
 
   getColorName(productId: number): string {
     return this.colors[this.getColorIndex(productId)].name;
+  }
+
+  openQuickView(): void {
+    this.dialog.open(ProductQuickView, {
+      data: this.product(),
+      panelClass: 'product-quick-view-panel',
+      maxWidth: '1000px',
+      width: '90vw',
+      autoFocus: false,
+    });
   }
 }
 

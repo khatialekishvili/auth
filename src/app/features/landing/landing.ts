@@ -1,7 +1,7 @@
 import { Component, signal, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ProductService } from 'shared/services/product.service';
-import { Modal } from 'shared/modals/discount/modal/modal';
+import { DiscountDialog } from 'shared/dialog/dialog';
 import { HoverElevateDirective } from 'shared/directives/hover-elevate.directive';
 import { ProductSwiper } from 'shared/components/product-swiper/product-swiper';
 
@@ -32,11 +32,12 @@ export class Landing {
   ngOnInit(): void {
     const alreadySeen = localStorage.getItem('discountUnlocked');
     if (!alreadySeen) {
-      this.dialog.open(Modal, {
+      this.dialog.open(DiscountDialog, {
         panelClass: 'discount-dialog-panel',
+        backdropClass: 'discount-dialog-backdrop',
         autoFocus: false,
-        maxWidth: '960px',
-        width: '100%',
+        maxWidth: '860px',
+        width: '90%',
       });
     }
   }

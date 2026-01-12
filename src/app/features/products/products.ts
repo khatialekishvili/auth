@@ -1,4 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
+import { NgClass } from '@angular/common';
 import { MatMenuModule } from '@angular/material/menu';
 import { ProductService } from 'shared/services/product.service';
 import { Product } from 'shared/models/product.models';
@@ -7,7 +8,7 @@ import { ProductCard } from 'shared/components/product-card/product-card';
 
 @Component({
   selector: 'app-products',
-  imports: [ProductCard, MatMenuModule],
+  imports: [ProductCard, MatMenuModule, NgClass],
   templateUrl: './products.html',
 })
 export class Products {

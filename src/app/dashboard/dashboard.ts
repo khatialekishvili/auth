@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { UploadModalComponent } from 'shared/modals/upload/upload-modal';
+import { DiscountDialog } from 'shared/dialog/dialog';
 
 @Component({
   selector: 'app-dashboard',
@@ -11,7 +11,7 @@ export class Dashboard {
   private readonly dialog = inject(MatDialog);
 
   openUpload(): void {
-    this.dialog.open(UploadModalComponent, {
+    this.dialog.open(DiscountDialog, {
       panelClass: 'upload-dialog-panel',
       maxWidth: '840px',
       width: '100%',

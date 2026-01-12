@@ -6,7 +6,7 @@
     <div class="flex items-center gap-6">
 
       <button 
-        class="md:hidden text-[20px]"
+        class="md:hidden text-xl"
         (click)="toggleMobileMenu()"
         aria-label="Toggle mobile menu"
         >
@@ -21,7 +21,7 @@
       </a>
 
       <ul 
-        class="hidden md:flex items-center gap-8 text-[15px] font-medium ml-6"
+        class="hidden md:flex items-center gap-8 text-sm font-medium ml-6"
         (mouseenter)="openHoverMenu()"
         (mouseleave)="closeHoverMenu()"
       >
@@ -45,10 +45,10 @@
            alt="Logo" />
     </a>
 
-    <div class="flex items-center gap-2 md:gap-6  text-[18px] md:text-[20px]">
+    <div class="flex items-center gap-2 md:gap-6 text-lg md:text-xl">
       <button
         type="button"
-        class="flex items-center justify-center text-[20px] hover:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-full p-1"
+        class="flex items-center justify-center text-xl hover:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-full p-1"
         aria-label="Open search"
         aria-haspopup="dialog"
         [attr.aria-expanded]="isSearchOverlayOpen()"
@@ -57,14 +57,15 @@
         <i class="ph ph-magnifying-glass"></i>
       </button>
 
-      <span class="hidden md:block text-[18px]">Stores</span>
+      <span class="hidden md:block text-lg">Stores</span>
 
       <div class="hidden md:flex items-center">
         <i class="ph ph-user hover:opacity-60"></i>
       </div>
 
       <div class="flex items-center gap-1">
-        <i class="ph ph-heart hover:opacity-60"></i>
+        <mat-icon class="!hover:opacity-60">favorite_outline</mat-icon>
+        <!-- <i class="ph ph-heart hover:opacity-60"></i> -->
         <span>{{ wishlistService.count() }}</span>
       </div>
 
@@ -79,14 +80,14 @@
   @if (isHoverMenuOpen() && !isSearchOverlayOpen()) {
     @let shopMenu = navItems[0];
     <section
-      class="hidden md:block absolute inset-x-0 top-full bg-white border border-gray-200 shadow-lg rounded-b-md text-[14px]"
+      class="hidden md:block absolute inset-x-0 top-full bg-white border border-gray-200 shadow-lg rounded-b-md text-sm"
       aria-label="Navigation menu"
       (mouseenter)="openHoverMenu()"
       (mouseleave)="closeHoverMenu()"
       (keydown.escape)="closeHoverMenu()"
     >
-      <div class="px-6 py-10 flex gap-19">
-        <div class="basis-[820px] pl-[140px] flex gap-25">
+      <div class="px-6 py-10 flex gap-20">
+        <div class="basis-auto pl-36 flex gap-24">
           @for (section of shopMenu.sections; track section.title) {
             <div class="space-y-3">
               <h2 class="text-xs tracking-[0.16em] uppercase text-gray-500">
@@ -105,7 +106,7 @@
           }
         </div>
 
-        <div class="w-[520px] flex-shrink-0 ml-auto mr-15 hidden xl:block">
+        <div class="w-[33rem] flex-shrink-0 ml-auto mr-16 hidden xl:block">
           <div class="overflow-hidden rounded-lg">
             <img
               ngSrc="assets/search.png"
@@ -122,23 +123,22 @@
 
   @if (isSearchOverlayOpen()) {
     <section
-      [class]="'absolute inset-x-0 top-full bg-white border border-gray-200 shadow-lg rounded-b-md text-[14px] z-[40] 
-      ' + (searchQuery() ? 'max-md:fixed max-md:inset-x-0 max-md:top-[60px] max-md:bottom-0 max-md:z-[60] max-md:overflow-y-auto max-md:border-none max-md:rounded-none max-md:shadow-none' : '')"
+      class="search-overlay"
+      [class.search-overlay--mobile-results]="!!searchQuery()"
       aria-label="Search"
       role="dialog"
       aria-modal="true"
       (keydown.escape)="closeSearchOverlay()"
     >
-      <div class="px-4 md:px-15 py-4 md:py-6">
+      <div class="px-4 md:px-16 py-4 md:py-6">
         <div class="flex items-center gap-4">
-          <i class="ph ph-magnifying-glass text-[18px] text-gray-600"></i>
+          <i class="ph ph-magnifying-glass text-lg text-gray-600"></i>
           
           <input
-            #searchInput
             type="text"
             placeholder="Search..."
             [formControl]="searchControl"
-            class="flex-1 text-[16px] md:text-[17px] font-light outline-none placeholder:text-gray-400"
+            class="flex-1 text-base md:text-lg font-light outline-none placeholder:text-gray-400"
             aria-label="Search products"
             autocomplete="off"
           />
@@ -146,9 +146,8 @@
           <button
             type="button"
             (click)="clearSearch()"
-            [class]="searchQuery() ? 'text-[20px] hover:opacity-60 duration-300 focus-visible:outline-none 
-            focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 
-            rounded-full p-2' : 'text-[20px] opacity-0 pointer-events-none rounded-full p-2'"
+            class="search-clear-btn"
+            [class.search-clear-btn--hidden]="!searchQuery()"
             aria-label="Clear search"
             [attr.aria-hidden]="!searchQuery()"
           >
@@ -163,8 +162,8 @@
           } @else if (searchQuery() && searchResults().length > 0) {
           <div class="pt-4 pb-4">
             <div class="flex items-center justify-between mb-4 border-b border-gray-200 pb-3 mt-8 md:mt-10">
-              <p class="text-[14px] text-gray-500">{{ searchResults().length }} results</p>
-              <a href="#" class="text-[14px] text-gray-500 hover:opacity-60 duration-300">View all</a>
+              <p class="text-sm text-gray-500">{{ searchResults().length }} results</p>
+              <a href="#" class="text-sm text-gray-500 hover:opacity-60 duration-300">View all</a>
             </div>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 md:max-h-[50vh] md:overflow-y-auto">
               @for (product of searchResults(); track product.id) {
@@ -180,12 +179,12 @@
                       class="absolute bottom-3 right-3 w-8 h-8 bg-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 duration-300 hover:bg-gray-100"
                       aria-label="Add to cart"
                     >
-                      <i class="ph ph-plus text-[18px]"></i>
+                      <i class="ph ph-plus text-lg"></i>
                     </button>
                   </div>
                   <div class="p-3 bg-white">
-                    <p class="font-normal text-gray-900 text-[14px] mb-1">{{ product.title }}</p>
-                    <p class="text-gray-600 text-[13px]">${{ product.price }}</p>
+                    <p class="font-normal text-gray-900 text-sm mb-1">{{ product.title }}</p>
+                    <p class="text-gray-600 text-xs">${{ product.price }}</p>
                   </div>
                 </div>
               }
@@ -200,6 +199,8 @@
 @if (isMobileMenuOpen()) {
   <div
     class="fixed inset-0 bg-white z-[70] overflow-y-auto md:hidden"
+    [class.animate-slide-in-left]="!isMobileMenuClosing()"
+    [class.animate-slide-out-left]="isMobileMenuClosing()"
     role="dialog"
     aria-modal="true"
     aria-label="Mobile navigation"
@@ -208,7 +209,7 @@
       <img src="assets/Logo.svg" width="86" height="19" alt="Logo" />
       <button
         (click)="closeMobileMenu()"
-        class="text-[26px]"
+        class="text-3xl"
         aria-label="Close mobile menu"
       >
         <i class="ph ph-x"></i>
@@ -218,7 +219,7 @@
     <div class="px-6 py-6">
       <div class="border-b border-gray-200 py-4">
         <button
-          class="w-full flex items-center justify-between text-left text-[15px] font-medium"
+          class="w-full flex items-center justify-between text-left text-sm font-medium"
           (click)="toggleShopSection()"
         >
         <div>
@@ -226,7 +227,7 @@
             Shop
           </a>
         </div>
-          <i [class]="shopExpanded() ? 'ph ph-minus text-[20px]' : 'ph ph-plus text-[20px]'"></i>
+          <i [class]="shopExpanded() ? 'ph ph-minus text-xl' : 'ph ph-plus text-xl'"></i>
         </button>
 
         @if (shopExpanded()) {
@@ -235,15 +236,15 @@
             @for (section of shopMenu.sections; track section.title; let idx = $index) {
               <div>
                 <button
-                  class="w-full flex items-center justify-between text-left text-[13px] text-gray-500 tracking-wide mb-3"
+                  class="w-full flex items-center justify-between text-left text-xs text-gray-500 tracking-wide mb-3"
                   (click)="idx === 0 ? toggleCategories() : idx === 1 ? toggleFeatured() : toggleCollections()"
                 >
                   <span>{{ section.title }}</span>
-                  <i [class]="(idx === 0 ? categoriesExpanded() : idx === 1 ? featuredExpanded() : collectionsExpanded()) ? 'ph ph-minus text-[15px]' : 'ph ph-plus text-[15px]'"></i>
+                  <i [class]="(idx === 0 ? categoriesExpanded() : idx === 1 ? featuredExpanded() : collectionsExpanded()) ? 'ph ph-minus text-sm' : 'ph ph-plus text-sm'"></i>
                 </button>
                 
                 @if ((idx === 0 && categoriesExpanded()) || (idx === 1 && featuredExpanded()) || (idx === 2 && collectionsExpanded())) {
-                  <ul class="space-y-2 pl-4 text-[14px] border-l border-gray-300 ml-2">
+                  <ul class="space-y-2 pl-4 text-sm border-l border-gray-300 ml-2">
                     @for (item of section.items; track item.label) {
                       <li>
                         <a [href]="item.link" class="text-gray-500 hover:text-gray-900 duration-300">
@@ -264,16 +265,16 @@
           <a 
             [href]="item.link" 
             (click)="toggleMobileMenu()" 
-            class="flex items-center justify-between text-[15px] font-medium">
+            class="flex items-center justify-between text-sm font-medium">
             <span>{{ item.label }}</span>
-            <i class="ph ph-plus text-[20px]"></i>
+            <i class="ph ph-plus text-xl"></i>
           </a>
         </div>
       }
 
       <div class="mt-6 space-y-4">
-        <a href="#" (click)="toggleMobileMenu()" class="block text-[14px]">Account</a>
-        <a href="#" (click)="toggleMobileMenu()" class="block text-[14px]">Stores</a>
+        <a href="#" (click)="toggleMobileMenu()" class="block text-sm">Account</a>
+        <a href="#" (click)="toggleMobileMenu()" class="block text-sm">Stores</a>
       </div>
     </div>
   </div>
@@ -281,14 +282,14 @@
 
 @if (isHoverMenuOpen() && !isSearchOverlayOpen()) {
   <div
-    class="hidden md:block fixed left-0 right-0 bottom-0 top-[80px] bg-black/20 backdrop-blur-sm z-30"
+    class="hidden md:block fixed left-0 right-0 bottom-0 top-20 bg-black/20 backdrop-blur-sm z-30"
     aria-hidden="true"
   ></div>
 }
 
 @if (isSearchOverlayOpen()) {
   <div
-    [class]="'fixed left-0 right-0 bottom-0 top-[80px] bg-black/20 backdrop-blur-sm z-30 
+    [class]="'fixed left-0 right-0 bottom-0 top-20 bg-black/20 backdrop-blur-sm z-30 
     ' + (searchQuery() ? 'max-md:hidden' : '')"
     (click)="closeSearchOverlay()"
     aria-hidden="true"

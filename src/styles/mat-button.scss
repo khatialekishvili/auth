@@ -1,0 +1,17 @@
+
+.mat-mdc-unelevated-button {
+  --mdc-filled-button-container-shape: 0 !important;
+  padding: 0.75rem 1.25rem !important;
+  border-radius: 0 !important;
+  transition: opacity 300ms !important;
+}
+
+.mat-mdc-unelevated-button .mdc-button {
+  padding: 0 !important;
+  min-width: auto !important;
+  border-radius: 0 !important;
+}
+
+.mat-mdc-unelevated-button:hover {
+  opacity: 0.8 !important;
+}
