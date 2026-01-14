@@ -84,7 +84,7 @@ export const NAV_ITEMS: NavItem[] = [
       }
     ]
   },
-  { label: 'Sales', link: '#' },
-  { label: 'Journal', link: '#' }
+  { label: 'Sales', link: '/products' },
+  { label: 'Journal', link: '/products' }
 ];
 
