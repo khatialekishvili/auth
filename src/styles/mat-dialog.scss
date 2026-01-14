@@ -28,7 +28,9 @@
   --mdc-dialog-container-shape: 0 !important;
 }
 
-.product-quick-view-panel .cdk-overlay-pane {
-  max-width: 1200px !important;
-}
+  .product-quick-view-panel .cdk-overlay-pane {
+    max-width: 1200px !important;
+    align-self: flex-end !important;
+    margin-bottom: 0 !important;
+  }
 

@@ -16,9 +16,10 @@ export const PRODUCT_COLORS: readonly ColorOption[] = [
 ] as const;
 
 export const SORT_OPTIONS: readonly SortOption[] = [
-  { id: 'featured', label: 'Featured' },
-  { id: 'best-selling', label: 'Best selling' },
+
   { id: 'price-low-high', label: 'Price, low to high' },
-  { id: 'price-high-low', label: 'Price, high to low' }
+  { id: 'price-high-low', label: 'Price, high to low' },
+  { id: 'featured', label: 'Featured' }
+  
 ] as const;
 

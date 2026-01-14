@@ -1,4 +1,4 @@
-<div class="bg-white max-w-6xl w-full grid grid-cols-1 md:grid-cols-2 relative">
+<div class="bg-white max-w-6xl w-full relative flex flex-col md:grid md:grid-cols-2">
   
   <button 
     mat-icon-button
@@ -8,34 +8,62 @@
     <mat-icon>close</mat-icon>
   </button>
 
-  <div class="p-6 flex gap-4">
-    <div class="flex flex-col gap-3 justify-start pt-2">
+  <div class="p-6 flex flex-col gap-4 md:flex-row">
+
+    <div class="hidden md:flex flex-col gap-3 justify-start pt-2">
       @for (image of product.images.slice(0, 4); track $index) {
-        <button 
+        <button
           (click)="selectedImageIndex = $index"
           [ngClass]="{
             'bg-black border-black': selectedImageIndex === $index,
             'bg-white border-gray-300': selectedImageIndex !== $index
           }"
           class="w-3 h-3 rounded-full border-2 transition-all"
-          [attr.aria-label]="'View image ' + ($index + 1)">
-        </button>
+          [attr.aria-label]="'View image ' + ($index + 1)"
+        ></button>
       }
     </div>
 
-      <div class="flex-1 overflow-y-auto max-h-[70vh] space-y-4">
+    <div class="w-full md:hidden">
+      <div class="aspect-[3/4] bg-gray-50 overflow-hidden">
+        <img
+          [src]="product.images[selectedImageIndex]"
+          [alt]="product.title"
+          class="w-full h-full object-cover"
+        />
+      </div>
+
+      <div class="flex justify-center gap-3 mt-4">
+        @for (image of product.images.slice(0, 4); track $index) {
+          <button
+            (click)="selectedImageIndex = $index"
+            [ngClass]="{
+              'bg-black border-black': selectedImageIndex === $index,
+              'bg-white border-gray-300': selectedImageIndex !== $index
+            }"
+            class="w-3 h-3 rounded-full border-2 transition-all"
+            [attr.aria-label]="'View image ' + ($index + 1)"
+          ></button>
+        }
+      </div>
+    </div>
+
+    <div class="hidden md:block flex-1 overflow-y-auto">
       @for (image of product.images; track $index) {
         <div class="aspect-[3/4] bg-gray-50" [id]="'image-' + $index">
           <img
             [src]="image"
             [alt]="product.title"
-            class="w-full h-full object-cover"/>
+            class="w-full h-full object-cover"
+          />
         </div>
       }
     </div>
+
   </div>
 
   <div class="p-6 md:p-10 flex flex-col">
+    <p class="text-xs text-gray-400 mb-3">Shop / Clothing</p>
     <h2 class="text-2xl md:text-3xl font-semibold mb-4">{{ product.title }}</h2>
     <p class="text-2xl font-medium mb-6">${{ product.price }}</p>
 
@@ -44,7 +72,8 @@
     </p>
 
     <div class="mb-6">
-      <p class="text-sm font-medium mb-3">Color</p>
+      <p class="text-sm font-medium mb-2">Product Color: {{ colors[selectedColorIndex]?.name }}</p>
+      <p class="text-sm text-gray-500 mb-3">Color</p>
       <div class="flex gap-2">
         @for (color of colors; track $index) {
           <button
@@ -96,6 +125,10 @@
         </mat-icon>
       </button>
     </div>
+
+    <button mat-button class="!p-0 !min-w-0 !text-sm !underline self-start mt-4">
+      View Full Details
+    </button>
   </div>
 
 </div>

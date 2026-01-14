@@ -71,9 +71,11 @@ export class ProductCard {
     this.dialog.open(ProductQuickView, {
       data: this.product(),
       panelClass: 'product-quick-view-panel',
+      hasBackdrop: true,
       maxWidth: '1000px',
-      width: '90vw',
+      width: 'full',
       autoFocus: false,
+      position: { bottom: '0' },
     });
   }
 }

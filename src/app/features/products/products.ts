@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, computed } from '@angular/core';
 import { NgClass } from '@angular/common';
 import { MatMenuModule } from '@angular/material/menu';
 import { ProductService } from 'shared/services/product.service';
@@ -22,6 +22,21 @@ export class Products {
   readonly categories = PRODUCT_CATEGORIES;
   readonly sortOptions = SORT_OPTIONS;
 
+  readonly sortedProducts = computed(() => {
+    const products = this.products();
+    const sortOption = this.selectedSort();
+
+    switch (sortOption) {
+      case 'price-high-low':
+        return [...products].sort((a, b) => b.price - a.price);
+      case 'price-low-high':
+        return [...products].sort((a, b) => a.price - b.price);
+      case 'featured':
+      default:
+        return products;
+    }
+  });
+
   constructor() {
     this.loadProducts();
   }
@@ -39,7 +54,6 @@ export class Products {
   selectSort(sortId: string): void {
     this.selectedSort.set(sortId);
     this.isMobileSortOpen.set(false);
-    console.log('Selected sort:', sortId);
   }
 
   toggleMobileSort(): void {

@@ -216,7 +216,7 @@
     </div>
 
     <div class="px-6 py-6">
-      @for (navItem of navItems(); track navItem.label; let navIdx = $index) {
+      @for (navItem of navItems(); track navItem.label) {
         <div class="border-b border-gray-200 py-4">
           <div class="w-full flex items-center justify-between">
             <a
@@ -231,7 +231,7 @@
               <button
                 type="button"
                 class="ml-4"
-                (click)="toggleExpanded(navIdx)"
+                (click)="toggleExpanded(navItem)"
                 aria-label="Toggle menu"
               >
                 <i
@@ -244,12 +244,12 @@
 
           @if (navItem.hasDropdown && navItem.isExpanded) {
             <div class="mt-4 pl-4 space-y-4">
-              @for (section of navItem.sections; track section.title; let secIdx = $index) {
+              @for (section of navItem.sections; track section.title) {
                 <div>
                   <button
                     type="button"
                     class="w-full flex items-center justify-between text-left text-sm text-gray-500 tracking-wide mb-3"
-                    (click)="toggleExpanded(navIdx, secIdx)"
+                    (click)="toggleExpanded(navItem, section)"
                   >
                     <span>{{ section.title }}</span>
                     <i

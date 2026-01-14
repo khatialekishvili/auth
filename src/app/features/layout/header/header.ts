@@ -8,7 +8,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ProductService } from 'shared/services/product.service';
 import { WishlistService } from 'shared/services/wishlist.service';
 import { CartService } from 'shared/services/cart.service';
-import { Product, NAV_ITEMS } from 'shared';
+import { Product, NAV_ITEMS, NavItem, MenuSection } from 'shared';
 import { MatIcon } from "@angular/material/icon";
 
 @Component({
@@ -93,28 +93,25 @@ export class Header {
     this.navItems.set([...items]);
   }
 
-  toggleExpanded(navIdx: number, sectionIdx?: number): void {
+  toggleExpanded(navItem: NavItem, section?: MenuSection): void {
     const items = this.navItems();
-    const navItem = items[navIdx];
-    if (!navItem) return;
-  
-    if (sectionIdx === undefined) {
+    const itemIndex = items.indexOf(navItem);
+    if (itemIndex === -1) return;
+
+    if (!section) {
       navItem.isExpanded = !navItem.isExpanded;
-  
+
       if (!navItem.isExpanded) {
         navItem.sections?.forEach(section => {
           section.isExpanded = false;
         });
       }
-  
+
     } else {
       navItem.isExpanded = true;
-  
-      const section = navItem.sections?.[sectionIdx];
-      if (!section) return;
-  
       section.isExpanded = !section.isExpanded;
     }
+
     this.navItems.set([...items]);
   }
 
