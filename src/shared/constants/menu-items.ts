@@ -5,9 +5,11 @@ export const NAV_ITEMS: NavItem[] = [
     label: 'Shop',
     link: '/products',
     hasDropdown: true,
+    isExpanded: false,
     sections: [
       {
         title: 'Categories',
+        isExpanded: false,
         items: [
           { label: 'Bags', link: '#' },
           { label: 'Clothing', link: '#' },
@@ -19,6 +21,7 @@ export const NAV_ITEMS: NavItem[] = [
       },
       {
         title: 'Featured',
+        isExpanded: false,
         items: [
           { label: 'New Arrivals', link: '#' },
           { label: 'Bestsellers', link: '#' },
@@ -28,7 +31,9 @@ export const NAV_ITEMS: NavItem[] = [
       },
       {
         title: 'Collections',
+        isExpanded: false,
         items: [
+          
           { label: 'Party and events', link: '#' },
           { label: 'Office looks', link: '#' },
           { label: 'Selection', link: '#' },
@@ -40,7 +45,45 @@ export const NAV_ITEMS: NavItem[] = [
       }
     ]
   },
-  { label: 'New Arrivals', link: '#' },
+  {
+    label: 'New Arrivals',
+    link: '/products',
+    hasDropdown: true,
+    isExpanded: false,
+    sections: [
+      {
+        title: 'New In',
+        isExpanded: false,
+        items: [
+          { label: 'Just Dropped', link: '/products' },
+          { label: 'This Week', link: '/products' },
+          { label: 'Trending Now', link: '/products' },
+          { label: 'Editor Picks', link: '/products' }
+        ]
+      },
+      {
+        title: 'By Category',
+        isExpanded: false,
+        items: [
+          { label: 'Bags', link: '/products' },
+          { label: 'Clothing', link: '/products' },
+          { label: 'Leather Goods', link: '/products' },
+          { label: 'Accessories', link: '/products' },
+          { label: 'Shop All', link: '/products' }
+        ]
+      },
+      {
+        title: 'Collections',
+        isExpanded: false,
+        items: [
+          { label: 'Party and events', link: '/products' },
+          { label: 'Office looks', link: '/products' },
+          { label: 'Online Exclusive', link: '/products' },
+          { label: 'Knitwear', link: '/products' }
+        ]
+      }
+    ]
+  },
   { label: 'Sales', link: '#' },
   { label: 'Journal', link: '#' }
 ];

@@ -1,4 +1,5 @@
 import { Component, input, inject, signal } from '@angular/core';
+import { NgClass } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -10,7 +11,7 @@ import { ProductQuickView } from 'shared/components/product-quick-view/product-q
 
 @Component({
   selector: 'app-product-card',
-  imports: [MatButtonModule, MatIconModule],
+  imports: [MatButtonModule, MatIconModule, NgClass],
   templateUrl: './product-card.html',
 })
 export class ProductCard {

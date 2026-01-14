@@ -1,4 +1,5 @@
 import { Component, inject, signal, DestroyRef } from '@angular/core';
+import { NgClass } from '@angular/common';
 import { NgOptimizedImage } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
@@ -12,7 +13,7 @@ import { MatIcon } from "@angular/material/icon";
 
 @Component({
   selector: 'app-header',
-  imports: [NgOptimizedImage, RouterLink, ReactiveFormsModule, MatIcon],
+  imports: [NgOptimizedImage, RouterLink, ReactiveFormsModule, MatIcon, NgClass, RouterLink],
   templateUrl: './header.html',
   styleUrl: './header.scss',
 })
@@ -22,16 +23,12 @@ export class Header {
   readonly wishlistService = inject(WishlistService);
   readonly cartService = inject(CartService);
 
-  readonly navItems = NAV_ITEMS;
+  readonly navItems = signal(NAV_ITEMS);
 
   readonly isHoverMenuOpen = signal(false);
   
   readonly isMobileMenuOpen = signal(false);
   readonly isMobileMenuClosing = signal(false);
-  readonly shopExpanded = signal(false);
-  readonly categoriesExpanded = signal(false);
-  readonly featuredExpanded = signal(false);
-  readonly collectionsExpanded = signal(false);
   
   readonly isSearchOverlayOpen = signal(false);
   readonly searchQuery = signal('');
@@ -83,16 +80,51 @@ export class Header {
     this.isHoverMenuOpen.set(false);
   }
 
+  private resetMobileExpansions(): void {
+    const items = this.navItems();
+    for (const item of items) {
+      item.isExpanded = false;
+      if (item.sections) {
+        for (const section of item.sections) {
+          section.isExpanded = false;
+        }
+      }
+    }
+    this.navItems.set([...items]);
+  }
+
+  toggleExpanded(navIdx: number, sectionIdx?: number): void {
+    const items = this.navItems();
+    const navItem = items[navIdx];
+    if (!navItem) return;
+  
+    if (sectionIdx === undefined) {
+      navItem.isExpanded = !navItem.isExpanded;
+  
+      if (!navItem.isExpanded) {
+        navItem.sections?.forEach(section => {
+          section.isExpanded = false;
+        });
+      }
+  
+    } else {
+      navItem.isExpanded = true;
+  
+      const section = navItem.sections?.[sectionIdx];
+      if (!section) return;
+  
+      section.isExpanded = !section.isExpanded;
+    }
+    this.navItems.set([...items]);
+  }
+
   toggleMobileMenu(): void {
     if (this.isMobileMenuOpen()) {
       this.isMobileMenuClosing.set(true);
       setTimeout(() => {
         this.isMobileMenuOpen.set(false);
         this.isMobileMenuClosing.set(false);
-        this.shopExpanded.set(false);
-        this.categoriesExpanded.set(false);
-        this.featuredExpanded.set(false);
-        this.collectionsExpanded.set(false);
+        this.resetMobileExpansions();
       }, 300); 
     } else {
       this.isMobileMenuOpen.set(true);
@@ -105,27 +137,8 @@ export class Header {
     setTimeout(() => {
       this.isMobileMenuOpen.set(false);
       this.isMobileMenuClosing.set(false);
-      this.shopExpanded.set(false);
-      this.categoriesExpanded.set(false);
-      this.featuredExpanded.set(false);
-      this.collectionsExpanded.set(false);
+      this.resetMobileExpansions();
     }, 300); 
-  }
-
-  toggleShopSection(): void {
-    this.shopExpanded.set(!this.shopExpanded());
-  }
-
-  toggleCategories(): void {
-    this.categoriesExpanded.set(!this.categoriesExpanded());
-  }
-
-  toggleFeatured(): void {
-    this.featuredExpanded.set(!this.featuredExpanded());
-  }
-
-  toggleCollections(): void {
-    this.collectionsExpanded.set(!this.collectionsExpanded());
   }
 
   openSearchOverlay(): void {

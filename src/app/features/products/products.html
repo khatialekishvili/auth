@@ -26,8 +26,8 @@
             [matMenuTriggerFor]="sortMenu"
             class="hidden md:flex text-base font-medium hover:opacity-60 transition-opacity items-center gap-1">
             Sort 
-            <i 
-              [class.rotate-180]="menuTrigger.menuOpen"
+            <i
+              [ngClass]="{'rotate-180': menuTrigger.menuOpen}"
               class="ph ph-caret-down text-xl transition-transform duration-300">
             </i>
           </button>
@@ -52,8 +52,8 @@
             (click)="toggleMobileSort()"
             class="md:hidden text-base font-medium hover:opacity-60 transition-opacity flex items-center gap-1">
             Sort 
-            <i 
-              [class.rotate-180]="isMobileSortOpen()"
+            <i
+              [ngClass]="{'rotate-180': isMobileSortOpen()}"
               class="ph ph-caret-down text-xl transition-transform duration-300">
             </i>
           </button>
@@ -94,7 +94,7 @@
           class="w-8 h-8 flex items-center justify-center"
           aria-label="Close"
         >
-          <i class="ph ph-x text-[24px]"></i>
+          <i class="ph ph-x text-base"></i>
         </button>
       </div>
 

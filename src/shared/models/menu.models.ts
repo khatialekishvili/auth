@@ -6,12 +6,14 @@ export interface MenuItem {
 export interface MenuSection {
   title: string;
   items: MenuItem[];
+  isExpanded?: boolean;
 }
 
 export interface NavItem {
   label: string;
   link: string;
   hasDropdown?: boolean;
+  isExpanded?: boolean;
   sections?: MenuSection[];
 }
 

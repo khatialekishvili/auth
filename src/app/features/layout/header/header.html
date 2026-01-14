@@ -17,7 +17,7 @@
       <img src="assets/Logo.svg"
            width="86"
            height="19"
-             alt="Logo" />
+           alt="Logo" />
       </a>
 
       <ul 
@@ -25,7 +25,7 @@
         (mouseenter)="openHoverMenu()"
         (mouseleave)="closeHoverMenu()"
       >
-        @for (item of navItems; track item.label) {
+        @for (item of navItems(); track item.label) {
           <li>
             <a 
               [routerLink]="item.link" 
@@ -42,7 +42,7 @@
     <img src="assets/Logo.svg"
          width="86"
          height="19"
-           alt="Logo" />
+         alt="Logo" />
     </a>
 
     <div class="flex items-center gap-2 md:gap-6 text-lg md:text-xl">
@@ -65,7 +65,6 @@
 
       <div class="flex items-center gap-1">
         <mat-icon class="!hover:opacity-60">favorite_outline</mat-icon>
-        <!-- <i class="ph ph-heart hover:opacity-60"></i> -->
         <span>{{ wishlistService.count() }}</span>
       </div>
 
@@ -78,7 +77,7 @@
   </nav>
 
   @if (isHoverMenuOpen() && !isSearchOverlayOpen()) {
-    @let shopMenu = navItems[0];
+    @let shopMenu = navItems()[0];
     <section
       class="hidden md:block absolute inset-x-0 top-full bg-white border border-gray-200 shadow-lg rounded-b-md text-sm"
       aria-label="Navigation menu"
@@ -96,8 +95,8 @@
               <ul class="space-y-2 mt-7">
                 @for (item of section.items; track item.label) {
                   <li>
-                    <a [href]="item.link" class="hover:opacity-60 duration-300">
-                      {{ item.label }}
+                    <a [routerLink]="item.link" class="hover:opacity-60 duration-300">
+                      {{ item.label }}  
                     </a>
                   </li>
                 }
@@ -124,7 +123,7 @@
   @if (isSearchOverlayOpen()) {
     <section
       class="search-overlay"
-      [class.search-overlay--mobile-results]="!!searchQuery()"
+      [ngClass]="{ 'search-overlay--mobile-results': !!searchQuery() }"
       aria-label="Search"
       role="dialog"
       aria-modal="true"
@@ -147,7 +146,7 @@
             type="button"
             (click)="clearSearch()"
             class="search-clear-btn"
-            [class.search-clear-btn--hidden]="!searchQuery()"
+            [ngClass]="{ 'search-clear-btn--hidden': !searchQuery() }"
             aria-label="Clear search"
             [attr.aria-hidden]="!searchQuery()"
           >
@@ -155,15 +154,15 @@
           </button>
         </div>
 
-          @if (searchQuery() && searchResults().length === 0) {
+        @if (searchQuery() && searchResults().length === 0) {
           <div class="text-center text-gray-500 pb-2 pt-4">
             <p class="text-lg">No results found for "{{ searchQuery() }}"</p>
           </div>
-          } @else if (searchQuery() && searchResults().length > 0) {
+        } @else if (searchQuery() && searchResults().length > 0) {
           <div class="pt-4 pb-4">
             <div class="flex items-center justify-between mb-4 border-b border-gray-200 pb-3 mt-8 md:mt-10">
               <p class="text-sm text-gray-500">{{ searchResults().length }} results</p>
-              <a href="#" class="text-sm text-gray-500 hover:opacity-60 duration-300">View all</a>
+              <a routerLink="/products" (click)="closeSearchOverlay()" class="text-sm text-gray-500 hover:opacity-60 duration-300">View all</a>
             </div>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 md:max-h-[50vh] md:overflow-y-auto">
               @for (product of searchResults(); track product.id) {
@@ -199,8 +198,8 @@
 @if (isMobileMenuOpen()) {
   <div
     class="fixed inset-0 bg-white z-[70] overflow-y-auto md:hidden"
-    [class.animate-slide-in-left]="!isMobileMenuClosing()"
-    [class.animate-slide-out-left]="isMobileMenuClosing()"
+    [ngClass]="{'animate-slide-in-left': !isMobileMenuClosing(), 
+    'animate-slide-out-left': isMobileMenuClosing()}"
     role="dialog"
     aria-modal="true"
     aria-label="Mobile navigation"
@@ -217,64 +216,73 @@
     </div>
 
     <div class="px-6 py-6">
-      <div class="border-b border-gray-200 py-4">
-        <button
-          class="w-full flex items-center justify-between text-left text-sm font-medium"
-          (click)="toggleShopSection()"
-        >
-        <div>
-          <a routerLink="/products" (click)="toggleMobileMenu()" class="hover:opacity-60 duration-300 cursor-pointer"> 
-            Shop
-          </a>
-        </div>
-          <i [class]="shopExpanded() ? 'ph ph-minus text-xl' : 'ph ph-plus text-xl'"></i>
-        </button>
+      @for (navItem of navItems(); track navItem.label; let navIdx = $index) {
+        <div class="border-b border-gray-200 py-4">
+          <div class="w-full flex items-center justify-between">
+            <a
+              [routerLink]="navItem.link"
+              (click)="toggleMobileMenu()"
+              class="text-sm font-medium hover:opacity-60 duration-300 cursor-pointer"
+            >
+              {{ navItem.label }}
+            </a>
 
-        @if (shopExpanded()) {
-          @let shopMenu = navItems[0];
-          <div class="mt-4 pl-4 space-y-4">
-            @for (section of shopMenu.sections; track section.title; let idx = $index) {
-              <div>
-                <button
-                  class="w-full flex items-center justify-between text-left text-xs text-gray-500 tracking-wide mb-3"
-                  (click)="idx === 0 ? toggleCategories() : idx === 1 ? toggleFeatured() : toggleCollections()"
-                >
-                  <span>{{ section.title }}</span>
-                  <i [class]="(idx === 0 ? categoriesExpanded() : idx === 1 ? featuredExpanded() : collectionsExpanded()) ? 'ph ph-minus text-sm' : 'ph ph-plus text-sm'"></i>
-                </button>
-                
-                @if ((idx === 0 && categoriesExpanded()) || (idx === 1 && featuredExpanded()) || (idx === 2 && collectionsExpanded())) {
-                  <ul class="space-y-2 pl-4 text-sm border-l border-gray-300 ml-2">
-                    @for (item of section.items; track item.label) {
-                      <li>
-                        <a [href]="item.link" class="text-gray-500 hover:text-gray-900 duration-300">
-                          {{ item.label }}
-                        </a>
-                      </li>
-                    }
-                  </ul>
-                }
-              </div>
+            @if (navItem.hasDropdown) {
+              <button
+                type="button"
+                class="ml-4"
+                (click)="toggleExpanded(navIdx)"
+                aria-label="Toggle menu"
+              >
+                <i
+                  class="ph text-xl"
+                  [ngClass]="{ 'ph-minus': navItem.isExpanded, 'ph-plus': !navItem.isExpanded }"
+                ></i>
+              </button>
             }
           </div>
-        }
-      </div>
 
-      @for (item of navItems.slice(1); track item.label) {
-        <div class="border-b border-gray-200 py-4">
-          <a 
-            [href]="item.link" 
-            (click)="toggleMobileMenu()" 
-            class="flex items-center justify-between text-sm font-medium">
-            <span>{{ item.label }}</span>
-            <i class="ph ph-plus text-xl"></i>
-          </a>
+          @if (navItem.hasDropdown && navItem.isExpanded) {
+            <div class="mt-4 pl-4 space-y-4">
+              @for (section of navItem.sections; track section.title; let secIdx = $index) {
+                <div>
+                  <button
+                    type="button"
+                    class="w-full flex items-center justify-between text-left text-sm text-gray-500 tracking-wide mb-3"
+                    (click)="toggleExpanded(navIdx, secIdx)"
+                  >
+                    <span>{{ section.title }}</span>
+                    <i
+                      class="ph text-sm"
+                      [ngClass]="{ 'ph-minus': section.isExpanded, 'ph-plus': !section.isExpanded }"
+                    ></i>
+                  </button>
+
+                  @if (section.isExpanded) {
+                    <ul class="space-y-2 pl-4 text-sm border-l border-gray-300 ml-2">
+                      @for (subItem of section.items; track subItem.label) {
+                        <li>
+                          <a
+                            [routerLink]="subItem.link"
+                            (click)="toggleMobileMenu()"
+                            class="text-gray-500 hover:text-gray-900 duration-300"
+                          >
+                            {{ subItem.label }}
+                          </a>
+                        </li>
+                      }
+                    </ul>
+                  }
+                </div>
+              }
+            </div>
+          }
         </div>
       }
 
       <div class="mt-6 space-y-4">
-        <a href="#" (click)="toggleMobileMenu()" class="block text-sm">Account</a>
-        <a href="#" (click)="toggleMobileMenu()" class="block text-sm">Stores</a>
+        <a routerLink="/login" (click)="toggleMobileMenu()" class="block text-sm">Account</a>
+        <a routerLink="/" (click)="toggleMobileMenu()" class="block text-sm">Stores</a>
       </div>
     </div>
   </div>
@@ -289,9 +297,9 @@
 
 @if (isSearchOverlayOpen()) {
   <div
-    [class]="'fixed left-0 right-0 bottom-0 top-20 bg-black/20 backdrop-blur-sm z-30 
-    ' + (searchQuery() ? 'max-md:hidden' : '')"
-    (click)="closeSearchOverlay()"
+    class="fixed left-0 right-0 bottom-0 top-20 bg-black/20 backdrop-blur-sm z-30"
+    [ngClass]="{  'max-md:hidden': searchQuery() }"
     aria-hidden="true"
+    (click)="closeSearchOverlay()"
   ></div>
 }

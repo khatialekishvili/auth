@@ -22,7 +22,7 @@
              hover:bg-gray-200 transition-colors z-10"
       [attr.aria-label]="isInWishlist(product().id) ? 'Remove from wishlist' : 'Add to wishlist'"
       >
-      <mat-icon [class.text-red-500]="isInWishlist(product().id)">
+      <mat-icon [ngClass]="{'text-red-500': isInWishlist(product().id)}">
         {{ isInWishlist(product().id) ? 'favorite' : 'favorite_outline' }}
       </mat-icon>
     </button>
@@ -33,10 +33,12 @@
           <p class="text-sm font-medium mb-2">{{ getColorName(product().id) }}</p>
           <div class="flex gap-2">
             @for (color of colors; track $index) {
-              <button 
+              <button
                 (click)="selectColor(product().id, $index)"
-                [class]="'w-6 h-6 rounded-full ' + color.bg + ' border-2 transition-all ' + 
-                         (getColorIndex(product().id) === $index ? color.border : 'border-gray-300 hover:border-black')"
+                class="w-6 h-6 rounded-full border-2 transition-all"
+                [ngClass]="(getColorIndex(product().id) === $index ?
+                  (color.bg + ' ' + color.border) :
+                  (color.bg + ' border-gray-300 hover:border-black'))"
                 [attr.aria-label]="color.name"
               ></button>
             }
@@ -48,8 +50,8 @@
           class="w-9 h-9 bg-transparent text-gray-600 flex items-center justify-center hover:text-black transition-colors"
           aria-label="Quick add to cart"
         >
-          <i 
-            [class.rotate-180]="isRecentlyAdded(product().id)"
+          <i
+            [ngClass]="{'rotate-180': isRecentlyAdded(product().id)}"
             class="ph ph-plus text-xl transition-transform duration-300">
           </i>
         </button>

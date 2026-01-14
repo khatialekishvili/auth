@@ -47,10 +47,12 @@
       <p class="text-sm font-medium mb-3">Color</p>
       <div class="flex gap-2">
         @for (color of colors; track $index) {
-          <button 
+          <button
             (click)="selectedColorIndex = $index"
-            [class]="'!w-8 !h-8 !min-w-0 !p-0 rounded-full ' + color.bg + ' border-2 transition-all ' + 
-                     (selectedColorIndex === $index ? color.border + ' scale-110' : 'border-gray-300 hover:border-black')"
+            class="!w-8 !h-8 !min-w-0 !p-0 rounded-full border-2 transition-all"
+            [ngClass]="(selectedColorIndex === $index ?
+              (color.bg + ' ' + color.border + ' scale-110') :
+              (color.bg + ' border-gray-300 hover:border-black'))"
             [attr.aria-label]="color.name">
           </button>
         }
@@ -89,7 +91,7 @@
         mat-icon-button
         (click)="toggleWishlist()"
         class="!border !border-gray-300">
-        <mat-icon [class.text-red-500]="isInWishlist">
+        <mat-icon [ngClass]="{'text-red-500': isInWishlist}">
           {{ isInWishlist ? 'favorite' : 'favorite_border' }}
         </mat-icon>
       </button>

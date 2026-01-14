@@ -13,7 +13,7 @@ swiper-container::part(button-prev) {
     transform: scale(1.03);
     background-color: #ffffff32;
   }
-  color: #333;
+  color: var(--color-text-gray);
 }
 
 swiper-container::part(bullet) {
