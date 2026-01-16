@@ -1,4 +1,5 @@
 import { Component, input, inject, signal } from '@angular/core';
+import { Router } from '@angular/router';
 import { NgClass } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
@@ -16,10 +17,12 @@ import { ProductQuickView } from 'shared/components/product-quick-view/product-q
 })
 export class ProductCard {
   private readonly dialog = inject(MatDialog);
+  private readonly router = inject(Router);
   readonly wishlistService = inject(WishlistService);
   readonly cartService = inject(CartService);
   
   readonly product = input.required<Product>();
+  readonly minimal = input(false); //detials pagebis dros vzgudav
   readonly recentlyAddedToCart = signal<Set<number>>(new Set());
   readonly selectedColors = signal<Record<number, number>>({});
   
@@ -68,15 +71,22 @@ export class ProductCard {
   }
 
   openQuickView(): void {
+    const isMobile = window.innerWidth < 768;
+
     this.dialog.open(ProductQuickView, {
       data: this.product(),
       panelClass: 'product-quick-view-panel',
       hasBackdrop: true,
       maxWidth: '1000px',
+      maxHeight: '90vh',
       width: 'full',
       autoFocus: false,
-      position: { bottom: '0' },
+      position: isMobile ? { bottom: '0' } : undefined,
     });
+  }
+
+  navigateToProductDetail(): void {
+    this.router.navigate(['/product', this.product().id]);
   }
 }
 

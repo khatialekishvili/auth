@@ -1,23 +1,23 @@
 <div class="group">
-  <div class="relative mb-4 overflow-hidden bg-gray-50 aspect-[3/4]">
+  <div class="relative mb-4 overflow-hidden bg-gray-50 aspect-[3/4] cursor-pointer" (click)="navigateToProductDetail()">
     <img
       [src]="product().thumbnail || product().images[0]"
       [alt]="product().title"
       class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
     
-    <button 
+    <button
       type="button"
       mat-icon-button
-      (click)="openQuickView()"
-      class="!absolute top-3 left-3 !w-9 !h-9 !bg-white !rounded-full
+      (click)="$event.stopPropagation(); openQuickView()"
+      class="!absolute top-3 left-3 !w-9 !h-9 !bg-white
              hover:!bg-gray-200 !transition-colors z-10 !flex !items-center !justify-center"
       aria-label="Quick view">
       <mat-icon class="!text-xl !w-5 !h-5 !leading-5">visibility</mat-icon>
     </button>
 
-    <button 
+    <button
       type="button"
-      (click)="toggleWishlist(product().id)"
+      (click)="toggleWishlist(product().id); $event.stopPropagation()"
       class="absolute top-3 right-3 w-9 h-9 bg-white rounded-full flex items-center justify-center
              hover:bg-gray-200 transition-colors z-10"
       [attr.aria-label]="isInWishlist(product().id) ? 'Remove from wishlist' : 'Add to wishlist'"
@@ -27,7 +27,8 @@
       </mat-icon>
     </button>
 
-    <div class="hidden md:block absolute bottom-0 left-0 right-0 bg-white/80 py-4 px-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+    @if (!minimal()) {
+    <div class="hidden md:block absolute bottom-0 left-0 right-0 rounded-md bg-white/80 py-4 px-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
       <div class="flex items-end justify-between">
         <div>
           <p class="text-sm font-medium mb-2">{{ getColorName(product().id) }}</p>
@@ -46,7 +47,7 @@
         </div>
         
         <button 
-          (click)="addToCart(product().id)"
+          (click)="addToCart(product().id); $event.stopPropagation()"
           class="w-9 h-9 bg-transparent text-gray-600 flex items-center justify-center hover:text-black transition-colors"
           aria-label="Quick add to cart"
         >
@@ -57,10 +58,11 @@
         </button>
       </div>
     </div>
+    }
   </div>
 
   <div>
-    <h3 class="text-sm font-normal mb-1 hover:opacity-60 transition-opacity cursor-pointer">
+    <h3 class="text-sm font-normal mb-1 hover:opacity-60 transition-opacity cursor-pointer" (click)="navigateToProductDetail()">
       {{ product().title }}
     </h3>
     <p class="text-sm font-medium">

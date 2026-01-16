@@ -11,6 +11,7 @@
 @import "swiper/css/pagination";
 @import './styles/minimal-forms.scss';
 @import './styles/_index.scss';
+@import './styles/mat-dialog.scss';
 
 html {
   @include mat.theme((
@@ -24,8 +25,6 @@ html {
   
   --mat-sys-primary: #000;
   --mat-sys-on-primary: #fff;
-  // --mat-sys-primary-container: #000;
-  // --mat-sys-on-primary-container: #fff;
   
   --color-text-gray: #333;
 }
@@ -42,20 +41,20 @@ body {
 
 @layer utilities {
   .w-500 {width: 500px;}
-  
   .h-532 {height: 532px;}
-  
   .w-600 {width: 600px;}
-  
   .h-600 {height: 600px;}
-  
   .h-800 {height: 800px;}
-  
+
+  .text-base {
+    font-size: 15px !important;
+  }
+
   @media (min-width: 768px) {
     .md\:w-600 {
       width: 600px;
     }
-    
+
     .md\:h-800 {
       height: 800px;
     }
@@ -117,4 +116,27 @@ html, body {
 
 .animate-slide-out-left {
   animation: slide-out-left 0.3s ease-in ;
+}
+
+
+.cdk-overlay-backdrop-showing {
+  backdrop-filter: blur(3px);
+}
+
+// .cdk-overlay-pane {
+//   border-radius: 10px !important;
+// }
+
+// .product-quick-view-panel {
+//   --mdc-dialog-container-shape: 0 !important;
+// }
+
+.mat-expansion-panel {
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.mat-expansion-panel-header .mat-expansion-indicator::after {
+  font-size: 24px !important;
+  font-weight: 300 !important;
 }

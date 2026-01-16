@@ -3,7 +3,6 @@
   .mat-mdc-dialog-surface,
   .mdc-dialog__surface {
     padding: 0 !important;
-    border-radius: 20px !important;
     overflow: hidden !important;
   }
   
@@ -14,23 +13,3 @@
   background-color: rgba(0, 0, 0, 0.5) !important;
   backdrop-filter: blur(4px) !important;
 }
-
-.product-quick-view-panel {
-  .mat-mdc-dialog-container,
-  .mat-mdc-dialog-surface,
-  .mdc-dialog__surface {
-    padding: 0 !important;
-    border-radius: 0 !important;
-    overflow: auto !important;
-    max-height: 90vh !important;
-  }
-  
-  --mdc-dialog-container-shape: 0 !important;
-}
-
-  .product-quick-view-panel .cdk-overlay-pane {
-    max-width: 1200px !important;
-    align-self: flex-end !important;
-    margin-bottom: 0 !important;
-  }
-

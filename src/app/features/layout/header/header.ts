@@ -13,7 +13,7 @@ import { MatIcon } from "@angular/material/icon";
 
 @Component({
   selector: 'app-header',
-  imports: [NgOptimizedImage, RouterLink, ReactiveFormsModule, MatIcon, NgClass, RouterLink],
+  imports: [NgOptimizedImage, RouterLink, ReactiveFormsModule, MatIcon, NgClass],
   templateUrl: './header.html',
   styleUrl: './header.scss',
 })
@@ -82,37 +82,26 @@ export class Header {
 
   private resetMobileExpansions(): void {
     const items = this.navItems();
-    for (const item of items) {
-      item.isExpanded = false;
-      if (item.sections) {
-        for (const section of item.sections) {
-          section.isExpanded = false;
-        }
-      }
-    }
+  
+    items.forEach(nav => {
+      nav.isExpanded = false;
+      nav.sections?.forEach(sec => (sec.isExpanded = false));
+    });
+  
     this.navItems.set([...items]);
   }
 
-  toggleExpanded(navItem: NavItem, section?: MenuSection): void {
-    const items = this.navItems();
-    const itemIndex = items.indexOf(navItem);
-    if (itemIndex === -1) return;
+  toggleExpanded(target: NavItem | MenuSection, event?: Event): void {
+    event?.preventDefault();
+    event?.stopPropagation();
 
-    if (!section) {
-      navItem.isExpanded = !navItem.isExpanded;
+    target.isExpanded = !target.isExpanded;
 
-      if (!navItem.isExpanded) {
-        navItem.sections?.forEach(section => {
-          section.isExpanded = false;
-        });
-      }
-
-    } else {
-      navItem.isExpanded = true;
-      section.isExpanded = !section.isExpanded;
+    if ('sections' in target && !target.isExpanded) {
+      target.sections?.forEach(sec => (sec.isExpanded = false));
     }
 
-    this.navItems.set([...items]);
+    this.navItems.set([...this.navItems()]);
   }
 
   toggleMobileMenu(): void {

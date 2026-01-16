@@ -11,6 +11,10 @@ export class ProductService {
     return this.http.get(`${this.base}`);
   }
 
+  getProductById(id: number) {
+    return this.http.get(`${this.base}/${id}`);
+  }
+
     getBags() {
         return this.http.get(`${this.base}/category/womens-bags`);
     }

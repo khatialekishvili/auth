@@ -123,7 +123,7 @@
   @if (isSearchOverlayOpen()) {
     <section
       class="search-overlay"
-      [ngClass]="{ 'search-overlay--mobile-results': !!searchQuery() }"
+      [class.search-overlay--mobile-results]="!!searchQuery()"
       aria-label="Search"
       role="dialog"
       aria-modal="true"
@@ -146,7 +146,7 @@
             type="button"
             (click)="clearSearch()"
             class="search-clear-btn"
-            [ngClass]="{ 'search-clear-btn--hidden': !searchQuery() }"
+            [class.search-clear-btn--hidden]="!searchQuery()"
             aria-label="Clear search"
             [attr.aria-hidden]="!searchQuery()"
           >
@@ -216,12 +216,13 @@
     </div>
 
     <div class="px-6 py-6">
-      @for (navItem of navItems(); track navItem.label) {
+      @let items = navItems();
+      @for (navItem of items; track navItem.label) {
         <div class="border-b border-gray-200 py-4">
           <div class="w-full flex items-center justify-between">
             <a
               [routerLink]="navItem.link"
-              (click)="toggleMobileMenu()"
+              (click)="closeMobileMenu()"
               class="text-sm font-medium hover:opacity-60 duration-300 cursor-pointer"
             >
               {{ navItem.label }}
@@ -231,7 +232,7 @@
               <button
                 type="button"
                 class="ml-4"
-                (click)="toggleExpanded(navItem)"
+                (click)="$event.preventDefault(); $event.stopPropagation(); toggleExpanded(navItem)"
                 aria-label="Toggle menu"
               >
                 <i
@@ -249,7 +250,7 @@
                   <button
                     type="button"
                     class="w-full flex items-center justify-between text-left text-sm text-gray-500 tracking-wide mb-3"
-                    (click)="toggleExpanded(navItem, section)"
+                    (click)="$event.preventDefault(); $event.stopPropagation(); toggleExpanded(section, $event)"
                   >
                     <span>{{ section.title }}</span>
                     <i
@@ -264,7 +265,7 @@
                         <li>
                           <a
                             [routerLink]="subItem.link"
-                            (click)="toggleMobileMenu()"
+                            (click)="closeMobileMenu()"
                             class="text-gray-500 hover:text-gray-900 duration-300"
                           >
                             {{ subItem.label }}
@@ -281,8 +282,8 @@
       }
 
       <div class="mt-6 space-y-4">
-        <a routerLink="/login" (click)="toggleMobileMenu()" class="block text-sm">Account</a>
-        <a routerLink="/" (click)="toggleMobileMenu()" class="block text-sm">Stores</a>
+        <a routerLink="/login" (click)="closeMobileMenu()" class="block text-sm">Account</a>
+        <a routerLink="/" (click)="closeMobileMenu()" class="block text-sm">Stores</a>
       </div>
     </div>
   </div>

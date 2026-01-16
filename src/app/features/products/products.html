@@ -1,7 +1,7 @@
 <div class="min-h-screen bg-white">
   <section class="w-full border-b border-gray-200">
     <div class="px-6 pt-4 md:pt-8 pb-4">
-      <h1 class="text-[32px] font-normal mb-6 md:mb-8 mt-10">Shop</h1>
+      <h1 class="text-2xl font-normal mb-6 md:mb-8 mt-10">Shop</h1>
 
       <div class="flex flex-col md:flex-row md:items-center md:justify-between pb-0 gap-6 md:gap-0">
         <div class="flex flex-wrap gap-3">
@@ -87,11 +87,12 @@
     ></div>
 
     <div class="md:hidden fixed bottom-0 left-0 right-0 bg-white rounded-t-2xl z-50 animate-slide-up">
-      <div class="flex items-center justify-between p-6 border-b border-gray-200">
+      <div class="relative flex items-center justify-center p-6 border-b border-gray-200">
         <h3 class="text-lg font-medium">Sort</h3>
-        <button 
+        <button
+          type="button"
           (click)="toggleMobileSort()"
-          class="w-8 h-8 flex items-center justify-center"
+          class="absolute right-6 w-8 h-8 flex items-center justify-center"
           aria-label="Close"
         >
           <i class="ph ph-x text-base"></i>
