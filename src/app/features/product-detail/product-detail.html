@@ -59,10 +59,11 @@
           <div class="mt-8 py-5">
             @for (accordion of accordions; track accordion.title) {
               <mat-expansion-panel class="mat-elevation-z0 border-none">
-                <mat-expansion-panel-header class="px-0 py-4">
+                <mat-expansion-panel-header >
                   <mat-panel-title class="text-base">{{ accordion.title }}</mat-panel-title>
                 </mat-expansion-panel-header>
-                <p [class]="accordion.contentSize === 'base' ? 'text-base text-gray-600 leading-relaxed' : 'text-sm text-gray-600 leading-relaxed'">
+                <p [ngClass]="accordion.contentSize === 'base' ? 'text-base' : 'text-sm'" 
+                class="text-gray-600 leading-relaxed">
                   {{ accordion.content }}
                 </p>
               </mat-expansion-panel>
