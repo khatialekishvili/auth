@@ -1,6 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from 'shared/services/auth.service';
 import { errorMsg } from 'shared/pipes/errorMsg';
 
@@ -17,6 +17,7 @@ import { SnackbarService } from 'shared/services/snackbar.service';
   selector: 'app-login',
   imports: [
     ReactiveFormsModule,
+    RouterLink,
     errorMsg,
     MatFormFieldModule,
     MatInputModule,
@@ -25,7 +26,6 @@ import { SnackbarService } from 'shared/services/snackbar.service';
     MatSnackBarModule
   ],
   templateUrl: './login.html',
-  styleUrl: './login.scss',
 })
 export class Login {
   private fb = inject(FormBuilder);
@@ -56,12 +56,12 @@ export class Login {
 
     this.auth.login(email!, password!).subscribe(({ error }) => {
       if (error) {
-        this.snackbar.error('არასწორი მონაცემები ან მომხმარებელი არ არსებობს');
+        this.snackbar.error('Authorization failed or user deosnt exist. Please check your credentials and try again.');
         return;
       }
 
-      this.snackbar.success('ავტორიზაცია წარმატებით განხორციელდა!');
-      this.router.navigateByUrl('/dashboard', { replaceUrl: true });
+      this.snackbar.success('Login successful!');
+      this.router.navigateByUrl('/', { replaceUrl: true });
     });
   }
 }

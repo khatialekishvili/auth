@@ -1,0 +1,76 @@
+
+.form-field-minimal {
+  margin-bottom: 1.5rem;
+
+  label {
+    display: block;
+    font-size: 11px;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+
+    .text-red-500 {
+      color: #ef4444;
+    }
+  }
+
+  input {
+    width: 100%;
+    border: 0;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 0.5rem 0;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 300ms;
+
+    &:focus {
+      border-bottom-color: #000;
+    }
+
+    &::placeholder {
+      color: #9ca3af;
+    }
+  }
+
+  .relative {
+    position: relative;
+
+    input {
+      padding-right: 2rem;
+    }
+
+    button {
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: #9ca3af;
+      cursor: pointer;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 300ms;
+
+      &:hover {
+        color: #000;
+      }
+
+      mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+      }
+    }
+  }
+
+  .text-red-500 {
+    color: #ef4444;
+    font-size: 11px;
+    margin-top: 0.25rem;
+  }
+}
+

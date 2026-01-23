@@ -5,6 +5,13 @@
 // Learn more about theming and how to use it for your application's
 // custom components at https://material.angular.dev/guide/theming
 @use '@angular/material' as mat;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import "swiper/css";
+@import "swiper/css/navigation";
+@import "swiper/css/pagination";
+@import './styles/minimal-forms.scss';
+@import './styles/_index.scss';
+@import './styles/mat-dialog.scss';
 
 html {
   @include mat.theme((
@@ -12,29 +19,124 @@ html {
       primary: mat.$azure-palette,
       tertiary: mat.$blue-palette,
     ),
-    typography: Roboto,
+    typography: ('Poppins', sans-serif),
     density: 0,
   ));
+  
+  --mat-sys-primary: #000;
+  --mat-sys-on-primary: #fff;
+  
+  --color-text-gray: #333;
 }
 
 body {
-  // Default the application to a light color theme. This can be changed to
-  // `dark` to enable the dark color theme, or to `light dark` to defer to the
-  // user's system settings.
   color-scheme: light;
-
-  // Set a default background, font and text colors for the application using
-  // Angular Material's system-level CSS variables. Learn more about these
-  // variables at https://material.angular.dev/guide/system-variables
   background-color: var(--mat-sys-surface);
   color: var(--mat-sys-on-surface);
   font: var(--mat-sys-body-medium);
 
-  // Reset the user agent margin.
   margin: 0;
 }
 @import "tailwindcss";
 
+@layer utilities {
+  .w-500 {width: 500px;}
+  .h-532 {height: 532px;}
+  .w-600 {width: 600px;}
+  .h-600 {height: 600px;}
+  .h-800 {height: 800px;}
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+  .text-base {
+    font-size: 15px !important;
+  }
+
+  @media (min-width: 768px) {
+    .md\:w-600 {
+      width: 600px;
+    }
+
+    .md\:h-800 {
+      height: 800px;
+    }
+  }
+}
+
+
+html, body {
+  height: 100%;
+}
+* {
+  font-family: 'Poppins', sans-serif;
+}
+
+
+@font-face {
+  font-family: "Styrene A Web";
+  src: url("/assets/fonts/StyreneAWeb-Regular.woff2") format("woff2");
+}
+
+.font-styrene {
+  font-family: "Styrene A Web", sans-serif;
+}
+
+
+
+.hover-elevate {
+  transform: scale(1.03);
+  box-shadow:
+    0 18px 45px rgba(15, 23, 42, 0.08),
+    0 8px 16px rgba(15, 23, 42, 0.04);
+  transition: transform 500ms ease, box-shadow 500ms ease;
+}
+
+@keyframes slide-up {
+  from {transform: translateY(100%);}
+  to {transform: translateY(0);}
+}
+
+.animate-slide-up {
+  animation: slide-up 0.2s ease-out;
+}
+
+
+
+@keyframes slide-in-left {
+  from {transform: translateX(-100%);}
+  to {transform: translateX(0);}
+}
+
+.animate-slide-in-left {
+  animation: slide-in-left 0.3s ease-out;
+}
+
+@keyframes slide-out-left {
+  from {transform: translateX(0);}
+  to {transform: translateX(-100%);}
+}
+
+.animate-slide-out-left {
+  animation: slide-out-left 0.3s ease-in ;
+}
+
+
+.cdk-overlay-backdrop-showing {
+  backdrop-filter: blur(3px);
+}
+
+// .cdk-overlay-pane {
+//   border-radius: 10px !important;
+// }
+
+// .product-quick-view-panel {
+//   --mdc-dialog-container-shape: 0 !important;
+// }
+
+.mat-expansion-panel {
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.mat-expansion-panel-header .mat-expansion-indicator::after {
+  font-size: 24px !important;
+  font-weight: 300 !important;
+}

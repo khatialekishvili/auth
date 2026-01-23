@@ -1,0 +1,192 @@
+@if (loading()) {
+  <div class="min-h-screen bg-white flex items-center justify-center">
+    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-black"></div>
+  </div>
+} @else if (product()) {
+  <div class="min-h-screen bg-white">
+    <div class=" px-6 pt-4 pb-4 ">
+      <button mat-icon-button class="w-8 h-8 transition-colors hover:text-gray-600" (click)="goBack()">
+        <mat-icon class="text-sm mr-1 align-middle !text-gray-600">arrow_back</mat-icon>
+
+      </button>
+    </div>
+
+    <div class="px-10 md:px-20 ">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10">
+
+        <div class="lg:col-span-8">
+          <div class="bg-gray-50 lg:hidden">
+            <img
+              [src]="product()!.images[selectedImageIndex()] || product()!.thumbnail"
+              [alt]="product()!.title"
+              class="w-full h-auto object-cover"
+            />
+          </div>
+
+          @if (product()!.images.length > 1) {
+            <div class="flex justify-center gap-3 mt-4 lg:hidden">
+              @for (image of product()!.images; track $index) {
+                <button
+                  (click)="selectImage($index)"
+                  class="w-2.5 h-2.5 rounded-full border border-gray-300 bg-white"
+                  [ngClass]="{'!bg-black': selectedImageIndex() === $index}"
+                ></button>
+              }
+            </div>
+          }
+
+          <div class="hidden lg:block space-y-6">
+            @for (image of product()!.images; track $index) {
+              <div class="bg-gray-50">
+                <img
+                  [src]="image"
+                  [alt]="product()!.title"
+                  class="w-full h-auto object-cover"
+                />
+              </div>
+            }
+          </div>
+
+        </div>
+
+        <aside class="lg:col-span-4">
+          <app-product-info-panel
+            [product]="product()!"
+            (addToCart)="onAddToCart()"
+            [showWishlistButton]="false">
+          </app-product-info-panel>
+
+          <div class="mt-8 py-5">
+            @for (accordion of accordions; track accordion.title) {
+              <mat-expansion-panel class="mat-elevation-z0 border-none">
+                <mat-expansion-panel-header >
+                  <mat-panel-title class="text-base">{{ accordion.title }}</mat-panel-title>
+                </mat-expansion-panel-header>
+                <p [ngClass]="accordion.contentSize === 'base' ? 'text-base' : 'text-sm'" 
+                class="text-gray-600 leading-relaxed">
+                  {{ accordion.content }}
+                </p>
+              </mat-expansion-panel>
+
+              <div class="border-b border-gray-300"></div>
+            }
+          </div>
+        </aside>
+
+      </div>
+    </div>
+
+    <section class="px-6 md:px-10 mt-16">
+      <div class="text-center mb-12">
+        <h2 class="text-xl font-normal mb-2">Elegant Ease</h2>
+        <p class="text-sm text-gray-500 max-w-2xl mx-auto">
+          A refined piece built for comfort. Crafted with care, designed to stay in your wardrobe for years.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+        @for (feature of features; track feature.title) {
+          <div>
+            <p class="text-xs uppercase tracking-[0.16em] text-gray-500 mb-3">{{ feature.title }}</p>
+            <p class="text-sm text-gray-600 leading-relaxed">
+              {{ feature.description }}
+            </p>
+          </div>
+        }
+      </div>
+    </section>
+
+    @if (featuredProducts().length > 0) {
+    <section class="px-6 md:px-10 mb-16">
+      <div class="flex flex-col md:flex-row justify-center gap-4">
+        @for (product of featuredProducts(); track product.id) {
+          <app-product-card [product]="product" [minimal]="true" class="w-full max-w-md" />
+        }
+      </div>
+    </section>
+    }
+
+    <section class="px-6 md:px-10 py-10">
+      <div class="flex items-end justify-between border-b border-gray-200 pb-4 mb-6">
+        <div>
+          <h3 class="text-base font-medium">Reviews</h3>
+          <p class="text-sm text-gray-500 mt-1">★★★★★ <span class="ml-2">4.4</span></p>
+        </div>
+        <button class="text-sm underline text-gray-600">Write a review</button>
+      </div>
+
+      <div class="divide-y divide-gray-200">
+        @for (review of reviews; track review.name) {
+          <div class="py-6 flex gap-6 md:gap-10">
+            <div class="w-24 md:w-32 shrink-0">
+              <p class="text-sm font-medium">{{ review.name }}</p>
+              <p class="text-xs text-gray-500 mt-1">{{ review.location }}</p>
+            </div>
+            <div class="flex-1">
+              <p class="text-sm">{{ review.rating }}</p>
+              <p class="text-sm text-gray-700 mt-2 leading-relaxed">
+                {{ review.review }}
+              </p>
+            </div>
+            <div class="w-16 md:w-20 text-right text-xs text-gray-500">{{ review.date }}</div>
+          </div>
+        }
+      </div>
+
+      <div class="flex items-center justify-center gap-2 mt-8 a">
+        <button mat-icon-button class="w-6 h-6">
+          <mat-icon>chevron_left</mat-icon>
+        </button>
+        <button mat-raised-button class="w-8 h-8 min-w-0 !bg-black !text-white">1</button>
+        <button mat-button class="w-8 h-8 min-w-0">2</button>
+        <button mat-button class="w-8 h-8 min-w-0">3</button>
+        <button mat-icon-button class="w-6 h-6">
+          <mat-icon>chevron_right</mat-icon>
+        </button>
+      </div>
+    </section>
+<!-- 
+    <section class="px-6 md:px-10 mb-16">
+      <div class="flex items-center justify-between mb-8">
+        <h3 class="text-base font-medium">Style With</h3>
+        <div class="flex items-center gap-2">
+          <button mat-icon-button class="w-8 h-8">
+            <mat-icon>chevron_left</mat-icon>
+          </button>
+          <button mat-icon-button class="w-8 h-8">
+            <mat-icon>chevron_right</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+        @for (i of [1,2,3,4]; track i) {
+          <div class="bg-[#F6F6F4] rounded-lg overflow-hidden">
+            <div class="aspect-[3/4] bg-gray-100"></div>
+            <div class="p-3 bg-white">
+              <p class="text-sm">Product {{ i }}</p>
+              <p class="text-xs text-gray-500 mt-1">$120</p>
+            </div>
+          </div>
+        }
+      </div>
+    </section>
+
+    <section class="px-6 md:px-10 mb-24">
+      <h3 class="text-base font-medium mb-8">Recently viewed</h3>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+        @for (i of [1,2,3,4]; track i) {
+          <div class="bg-[#F6F6F4] rounded-lg overflow-hidden">
+            <div class="aspect-[3/4] bg-gray-100"></div>
+            <div class="p-3 bg-white">
+              <p class="text-sm">Product {{ i }}</p>
+              <p class="text-xs text-gray-500 mt-1">$120</p>
+            </div>
+          </div>
+        }
+      </div>
+    </section> -->
+
+  </div>
+}
